@@ -1,0 +1,17 @@
+# PC Control Center — dependências (Python 3.11+ / Windows 10 ou 11)
+PySide6>=6.7          # interface gráfica (Qt 6), vídeo (papel de parede animado) e WebSocket (OBS)
+pyqtgraph>=0.13.7     # gráficos em tempo real
+numpy>=1.26           # usado pelo pyqtgraph e pelo visualizador de áudio
+psutil>=5.9           # CPU, memória, discos, rede
+pywin32>=306          # contadores PDH, COM, DPAPI, APIs do Windows
+WMI>=1.5.1            # consultas WMI (discos, sensores, brilho)
+# Widget "Player de música": controles de mídia do Windows (WinRT)
+winrt-runtime>=2.0
+winrt-Windows.Media.Control>=2.0
+winrt-Windows.Foundation>=2.0
+winrt-Windows.Foundation.Collections>=2.0
+winrt-Windows.Storage.Streams>=2.0
+# Mídia (Fase 9): mixer de volume por app e visualizador (captura do som do sistema)
+pycaw>=20240210
+comtypes>=1.4
+soundcard>=0.4.3

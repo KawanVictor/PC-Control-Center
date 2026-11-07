@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --------------------------------------------------------------- build
+# (o build roda em %LOCALAPPDATA%; estas pastas só aparecem se rodar o PyInstaller direto)
+build/
+dist/
+*.spec.bak
+# instaladores e .zip gerados pelo build.ps1 — publique em "Releases" no GitHub
+release/
+
+# ------------------------------------------------- saídas dos testes (capturas)
+# As capturas mostram dados reais do PC (rede, processos, músicas): não versionar.
+screenshots/
+shots/
+widget_shots/
+
+# ------------------------------------------------ dados do usuário / sensíveis
+# O app guarda tudo em %APPDATA%\PCControlCenter, mas por garantia:
+*.db
+*.db-wal
+*.db-shm
+*.log
+settings.json
+widgets.json
+*.pcctema
+*.corrompido-*
+
+# ------------------------------------------------------------------ editores
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini

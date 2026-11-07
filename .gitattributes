@@ -1,0 +1,18 @@
+# Normaliza finais de linha no repositório
+* text=auto
+
+# Scripts do Windows precisam de CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.iss text eol=crlf
+
+# Código e documentação
+*.py   text eol=lf
+*.md   text eol=lf
+*.json text eol=lf
+*.spec text eol=lf
+
+# Binários
+*.ico binary
+*.png binary
+*.jpg binary

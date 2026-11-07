@@ -1,0 +1,62 @@
+{
+  "appearance": {
+    "mode": "dark",
+    "accent": "cyan",
+    "transparency": 0.72,
+    "animations": true
+  },
+  "general": {
+    "start_with_windows": false,
+    "start_minimized": false,
+    "minimize_to_tray": true,
+    "close_to_tray": true
+  },
+  "monitoring": {
+    "refresh_ms": 1000,
+    "history_points": 120,
+    "process_refresh_ms": 2000,
+    "slow_refresh_ms": 5000,
+    "db_sample_seconds": 60,
+    "db_retention_days": 30
+  },
+  "network": {
+    "ping_enabled": true,
+    "ping_host": "1.1.1.1",
+    "ping_interval_ms": 1000,
+    "devices_watch": false,
+    "devices_interval_min": 15,
+    "devices_alert": true
+  },
+  "notifications": {
+    "enabled": true,
+    "respect_focus": true,
+    "quiet_hours": false,
+    "quiet_start": "22:00",
+    "quiet_end": "07:00"
+  },
+  "alerts": {
+    "weekly_report": true,
+    "last_weekly_report": 0,
+    "rules": {}
+  },
+  "widgets": {
+    "show_on_startup": true
+  },
+  "media": {
+    "obs": {"enabled": false, "autoconnect": true, "host": "127.0.0.1", "port": 4455, "password": ""},
+    "youtube": {"channels": [], "notify": true}
+  },
+  "scenes": {"list": [], "active": {}},
+  "autotheme": {"enabled": false, "mode": "sun", "light_at": "07:00", "dark_at": "19:00",
+                "apps": true, "system": true, "app_theme": true},
+  "dynwall": {"enabled": false, "mode": "bing", "folder": "", "interval_min": 30, "shuffle": true,
+              "periods": {}, "style": "fill", "nasa_key": "", "last_change": 0, "last_period": ""},
+  "livewall": {"enabled": false, "path": "", "all_screens": true, "pause_on_battery": true,
+               "pause_when_covered": true},
+  "display": {"warm_auto": false, "warm_level": 50},
+  "hotkeys": {"enabled": true},
+  "window": {
+    "width": 1360,
+    "height": 860
+  }
+}
