@@ -24,8 +24,8 @@ class LevelMeter(QWidget):
 
     def paintEvent(self, _e) -> None:
         p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
-        p.setPen(Qt.NoPen)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        p.setPen(Qt.PenStyle.NoPen)
         p.setBrush(QColor(255, 255, 255, 30))
         p.drawRoundedRect(QRectF(self.rect()), 4, 4)
         w = self.width() * max(0.0, min(1.0, self.value * 1.4))
@@ -56,7 +56,7 @@ class SpectrumView(QWidget):
         bands, peaks, _lvl = AudioVisualizer.instance().snapshot()
         t = ThemeManager.instance().theme
         p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         w, h = self.width(), self.height()
         n = len(bands)
         gap = 4
@@ -64,7 +64,7 @@ class SpectrumView(QWidget):
         g = QLinearGradient(0, h, 0, 0)
         g.setColorAt(0, QColor(t.accent))
         g.setColorAt(1, QColor(t.accent2))
-        p.setPen(Qt.NoPen)
+        p.setPen(Qt.PenStyle.NoPen)
         for i, v in enumerate(bands):
             x = i * (bw + gap)
             bh = max(3.0, v * (h - 8))
@@ -91,7 +91,7 @@ class Sparkline(QWidget):
             return
         t = ThemeManager.instance().theme
         p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         w, h = self.width(), self.height()
         top = max(max(self.values) * 1.15, 30)
         step = w / 59

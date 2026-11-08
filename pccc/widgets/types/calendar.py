@@ -64,7 +64,7 @@ class CalendarWidget(Renderer):
         heads = ["D", "S", "T", "Q", "Q", "S", "S"] if sun_first else ["S", "T", "Q", "Q", "S", "S", "D"]
         cw, x0, top = 33, 15, 44
         for i, hd in enumerate(heads):
-            c.text(x0 + i * cw, top, cw, 18, hd, 11, 600, color=c.s.muted, align=Qt.AlignCenter)
+            c.text(x0 + i * cw, top, cw, 18, hd, 11, 600, color=c.s.muted, align=Qt.AlignmentFlag.AlignCenter)
         cal = calendar.Calendar(firstweekday=6 if sun_first else 0)
         hol = br_holidays(y) if self.opt["holidays"] else {}
         for r, week in enumerate(cal.monthdatescalendar(y, m)):
@@ -78,7 +78,7 @@ class CalendarWidget(Renderer):
                 elif d in hol and d.month == m:
                     color = RED
                 c.text(cx, cy, cw, 28, str(d.day), 12.5, 600 if d == today else 400, color=color,
-                       align=Qt.AlignCenter)
+                       align=Qt.AlignmentFlag.AlignCenter)
         nxt = sorted((d, n) for d, n in hol.items() if d.month == m and d >= today)
         if nxt and self.offset == 0:
             d, n = nxt[0]

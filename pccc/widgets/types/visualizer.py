@@ -30,7 +30,7 @@ class VisualizerWidget(Renderer):
         grad = QLinearGradient(0, y0 + h, 0, y0)
         grad.setColorAt(0, c.s.accent)
         grad.setColorAt(1, c.s.accent2)
-        c.p.setPen(Qt.NoPen)
+        c.p.setPen(Qt.PenStyle.NoPen)
         c.p.setBrush(QBrush(grad))
         for i, v in enumerate(vals):
             bh = max(2.0, v * (h / 2 if mirror else h))

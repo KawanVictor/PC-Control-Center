@@ -50,13 +50,13 @@ class ToolsPage(Page):
         for title, desc, glyph, target, args, admin, confirm in TOOLS:
             btn = QPushButton()
             btn.setObjectName("Tile")
-            btn.setCursor(Qt.PointingHandCursor)
+            btn.setCursor(Qt.CursorShape.PointingHandCursor)
             btn.setMinimumHeight(86)
             lay = QHBoxLayout(btn)
             lay.setContentsMargins(14, 10, 14, 10)
             lay.setSpacing(14)
             ic = icon_label(glyph, 18)
-            ic.setAttribute(Qt.WA_TransparentForMouseEvents)
+            ic.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             lay.addWidget(ic)
             col = QVBoxLayout()
             col.setSpacing(2)
@@ -64,7 +64,7 @@ class ToolsPage(Page):
             t.setStyleSheet("font-size: 10.5pt;")
             d = label(desc, "Faint", wrap=True)
             for w in (t, d):
-                w.setAttribute(Qt.WA_TransparentForMouseEvents)
+                w.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
                 col.addWidget(w)
             lay.addLayout(col, 1)
             btn.clicked.connect(lambda _=False, a=(title, target, args, admin, confirm): self._launch(*a))
@@ -78,8 +78,8 @@ class ToolsPage(Page):
 
     def _launch(self, title: str, target: str, args: str, admin: bool, confirm: str | None) -> None:
         if confirm:
-            res = QMessageBox.question(self, title, confirm, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if res != QMessageBox.Yes:
+            res = QMessageBox.question(self, title, confirm, QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+            if res != QMessageBox.StandardButton.Yes:
                 return
         if not shell_open(target, args, admin=admin):
             QMessageBox.warning(self, title, "Não foi possível abrir a ferramenta (ou a permissão foi negada).")

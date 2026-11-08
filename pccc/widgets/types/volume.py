@@ -22,7 +22,7 @@ class VolumeWidget(Renderer):
             return
         vol, muted = st["master"]
         c.ring(46, 48, 30, 0 if muted else vol * 100, 7, RED if muted else None)
-        c.text(16, 30, 60, 36, "mudo" if muted else f"{vol * 100:.0f}", 13 if muted else 19, 600, align=Qt.AlignCenter)
+        c.text(16, 30, 60, 36, "mudo" if muted else f"{vol * 100:.0f}", 13 if muted else 19, 600, align=Qt.AlignmentFlag.AlignCenter)
         c.text(96, 10, 170, 18, "Volume", 12.5, 600)
         for rect, aid in self.hit_areas():
             g = {"down": "", "mute": "" if muted else "", "up": ""}[aid]   # − / som / +

@@ -44,7 +44,7 @@ class ObsView(QWidget):
         con.add(hp)
         pw = QHBoxLayout()
         self.password = QLineEdit(unprotect(s.get("media.obs.password", "")))
-        self.password.setEchoMode(QLineEdit.Password)
+        self.password.setEchoMode(QLineEdit.EchoMode.Password)
         self.password.setPlaceholderText("Senha do servidor WebSocket (se houver)")
         pw.addWidget(label("Senha"))
         pw.addWidget(self.password, 1)

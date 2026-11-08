@@ -152,7 +152,7 @@ class DevicesView(QWidget):
         it = self.table.item(row, 0)
         if it is None:
             return None
-        mac = it.data(Qt.UserRole)
+        mac = it.data(Qt.ItemDataRole.UserRole)
         return next((d for d in self._rows if d.mac == mac), None)
 
     def _rename(self, row: int) -> None:
@@ -244,7 +244,7 @@ class DevicesView(QWidget):
                 _Item("agora" if d.online else _ago(d.last_seen), -(d.last_seen or 0)),
                 _Item(situ),
             ]
-            cells[0].setData(Qt.UserRole, d.mac)
+            cells[0].setData(Qt.ItemDataRole.UserRole, d.mac)
             cells[0].setForeground(QColor("#34d399") if d.online else muted)
             cells[0].setToolTip("Conectado agora" if d.online else "Não respondeu na última busca")
             if not d.online:

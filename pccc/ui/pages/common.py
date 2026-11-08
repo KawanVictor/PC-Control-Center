@@ -37,10 +37,10 @@ class SortItem(QTableWidgetItem):
 
     def __init__(self, text: str, sort_value=None) -> None:
         super().__init__(text)
-        self.setData(Qt.UserRole, sort_value if sort_value is not None else text.lower())
+        self.setData(Qt.ItemDataRole.UserRole, sort_value if sort_value is not None else text.lower())
 
     def __lt__(self, other) -> bool:
-        a, b = self.data(Qt.UserRole), other.data(Qt.UserRole)
+        a, b = self.data(Qt.ItemDataRole.UserRole), other.data(Qt.ItemDataRole.UserRole)
         try:
             return a < b
         except TypeError:
@@ -53,27 +53,27 @@ def make_table(headers: list[str], stretch: int = 0) -> QTableWidget:
     t.verticalHeader().hide()
     t.setShowGrid(False)
     t.setAlternatingRowColors(True)
-    t.setEditTriggers(QAbstractItemView.NoEditTriggers)
-    t.setSelectionBehavior(QAbstractItemView.SelectRows)
-    t.setSelectionMode(QAbstractItemView.SingleSelection)
+    t.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+    t.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+    t.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
     t.verticalHeader().setDefaultSectionSize(32)
     t.setSortingEnabled(True)
     t.setWordWrap(False)              # sem quebra: caminhos longos são cortados no fim, não no meio
-    t.setTextElideMode(Qt.ElideRight)
-    t.sortByColumn(0, Qt.AscendingOrder)
-    t.setContextMenuPolicy(Qt.CustomContextMenu)
+    t.setTextElideMode(Qt.TextElideMode.ElideRight)
+    t.sortByColumn(0, Qt.SortOrder.AscendingOrder)
+    t.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
     hh = t.horizontalHeader()
     hh.setHighlightSections(False)
-    hh.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+    hh.setDefaultAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
     for i in range(len(headers)):
-        hh.setSectionResizeMode(i, QHeaderView.Stretch if i == stretch else QHeaderView.ResizeToContents)
+        hh.setSectionResizeMode(i, QHeaderView.ResizeMode.Stretch if i == stretch else QHeaderView.ResizeMode.ResizeToContents)
     t.setMinimumHeight(420)
     return t
 
 
 def ask(parent, title: str, text: str, detail: str = "", danger_text: str = "Continuar") -> bool:
     box = QMessageBox(parent)
-    box.setIcon(QMessageBox.Warning)
+    box.setIcon(QMessageBox.Icon.Warning)
     box.setWindowTitle(title)
     box.setText(text)
     if detail:
@@ -95,7 +95,7 @@ def setting_row(title: str, desc: str, control: QWidget) -> QWidget:
     if desc:
         col.addWidget(label(desc, "Faint", wrap=True))
     h.addLayout(col, 1)
-    h.addWidget(control, 0, Qt.AlignRight | Qt.AlignVCenter)
+    h.addWidget(control, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
     return w
 
 
@@ -103,7 +103,7 @@ def labeled_slider(value: int, on_release, lo: int = 0, hi: int = 100, width: in
     w = QWidget()
     h = QHBoxLayout(w)
     h.setContentsMargins(0, 0, 0, 0)
-    s = QSlider(Qt.Horizontal)
+    s = QSlider(Qt.Orientation.Horizontal)
     s.setRange(lo, hi)
     s.setValue(value)
     s.setFixedWidth(width)

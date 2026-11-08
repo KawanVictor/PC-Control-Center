@@ -21,7 +21,7 @@ def _thumbs(paths: list[str], w: int = 240, h: int = 135) -> list[tuple[str, QIm
     for p in paths:
         img = QImage(p)
         if not img.isNull():
-            out.append((p, img.scaled(w, h, Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+            out.append((p, img.scaled(w, h, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
                         .copy(0, 0, w, h)))
     return out
 
@@ -56,10 +56,10 @@ class WallpaperTab:
         choose = QPushButton("Escolher imagem do computador...")
         choose.setObjectName("Primary")
         choose.clicked.connect(self._choose_wallpaper)
-        col.addWidget(choose, 0, Qt.AlignLeft)
+        col.addWidget(choose, 0, Qt.AlignmentFlag.AlignLeft)
         folder = QPushButton("Abrir pasta das imagens anteriores")
         folder.clicked.connect(lambda: open_folder(str(wallpaper.backup_dir())))
-        col.addWidget(folder, 0, Qt.AlignLeft)
+        col.addWidget(folder, 0, Qt.AlignmentFlag.AlignLeft)
         col.addStretch(1)
         row.addLayout(col, 1)
         cur.add(row)
@@ -81,7 +81,7 @@ class WallpaperTab:
         b.setIcon(QPixmap.fromImage(img))
         b.setIconSize(QSize(200, 112))
         b.setToolTip(os.path.basename(path))
-        b.setCursor(Qt.PointingHandCursor)
+        b.setCursor(Qt.CursorShape.PointingHandCursor)
         b.setStyleSheet("QPushButton { padding: 2px; border-radius: 10px; }")
         b.clicked.connect(lambda _=False, p=path: on_click(p))
         return b

@@ -87,9 +87,9 @@ def _patch_lan() -> None:
 
 # ------------------------------------------------------------- área de trabalho
 def _wallpaper(w: int, h: int) -> QImage:
-    img = QImage(w, h, QImage.Format_ARGB32_Premultiplied)
+    img = QImage(w, h, QImage.Format.Format_ARGB32_Premultiplied)
     p = QPainter(img)
-    p.setRenderHint(QPainter.Antialiasing)
+    p.setRenderHint(QPainter.RenderHint.Antialiasing)
     g = QLinearGradient(0, 0, w, h)
     g.setColorAt(0, QColor("#0b1026"))
     g.setColorAt(0.55, QColor("#1b1f4b"))
@@ -121,7 +121,7 @@ def desktop_shot(path: Path) -> None:
     w, h = 1600, 900
     img = _wallpaper(w, h)
     p = QPainter(img)
-    p.setRenderHint(QPainter.Antialiasing)
+    p.setRenderHint(QPainter.RenderHint.Antialiasing)
     # (tipo, x, y): coluna da direita como num desktop de verdade, e o visualizador embaixo
     layout = [("clock", 1310, 24), ("weather", 1288, 156), ("cpu", 1330, 330), ("ram", 1330, 472),
               ("netspeed", 1330, 614), ("calendar", 24, 24), ("sysinfo", 24, 290), ("wifi", 24, 464)]

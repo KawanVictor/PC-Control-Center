@@ -45,7 +45,7 @@ class ThemesTab:
             pic = QLabel("carregando...")
             pic.setObjectName("Faint")
             pic.setFixedHeight(130)
-            pic.setAlignment(Qt.AlignCenter)
+            pic.setAlignment(Qt.AlignmentFlag.AlignCenter)
             if t.wallpaper:
                 pics.setdefault(t.wallpaper, []).append(pic)
             else:

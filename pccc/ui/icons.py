@@ -62,20 +62,20 @@ def make_app_icon(c1: str = "#22d3ee", c2: str = "#6366f1") -> QIcon:
     icon = QIcon()
     for size in (16, 20, 24, 32, 40, 48, 64, 128, 256):
         pm = QPixmap(size, size)
-        pm.fill(Qt.transparent)
+        pm.fill(Qt.GlobalColor.transparent)
         p = QPainter(pm)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         r = QRectF(0, 0, size, size).adjusted(size * .04, size * .04, -size * .04, -size * .04)
         grad = QLinearGradient(r.topLeft(), r.bottomRight())
         grad.setColorAt(0, QColor(c1))
         grad.setColorAt(1, QColor(c2))
-        p.setPen(Qt.NoPen)
+        p.setPen(Qt.PenStyle.NoPen)
         p.setBrush(QBrush(grad))
         p.drawRoundedRect(r, size * .24, size * .24)
 
-        pen = QPen(QColor("white"), max(1.4, size * .085), Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+        pen = QPen(QColor("white"), max(1.4, size * .085), Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin)
         p.setPen(pen)
-        p.setBrush(Qt.NoBrush)
+        p.setBrush(Qt.BrushStyle.NoBrush)
         s = size
         path = QPainterPath(QPointF(s * .20, s * .55))
         for x, y in ((.36, .55), (.45, .30), (.56, .74), (.64, .48), (.80, .48)):

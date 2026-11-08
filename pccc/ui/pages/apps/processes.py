@@ -63,7 +63,7 @@ class ProcessesView(QWidget):
 
         self.table = make_table(["Nome", "PID / qtd.", "Tipo", "CPU", "Memória", "Threads", "Janela / caminho"],
                                 stretch=6)
-        self.table.horizontalHeader().setSortIndicator(3, Qt.DescendingOrder)
+        self.table.horizontalHeader().setSortIndicator(3, Qt.SortOrder.DescendingOrder)
         self.table.itemSelectionChanged.connect(self._update_buttons)
         self.table.customContextMenuRequested.connect(self._menu)
         card.add(self.table, 1)
@@ -142,7 +142,7 @@ class ProcessesView(QWidget):
             mem_total += mem
             title = next((e.title for e in group if e.title), "")
             name = SortItem(first.name + (f"  ({len(group)})" if len(group) > 1 else ""), first.name.lower())
-            name.setData(Qt.UserRole + 1, r)
+            name.setData(Qt.ItemDataRole.UserRole + 1, r)
             icon = file_icon(first.exe)
             if icon:
                 name.setIcon(icon)
@@ -152,7 +152,7 @@ class ProcessesView(QWidget):
                      SortItem(str(thr), thr), SortItem(title or first.exe or "(protegido)")]
             for c, item in enumerate(cells):
                 if c in (1, 3, 4, 5):
-                    item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 if c == 3 and cpu >= 25:
                     item.setForeground(QColor("#fb7185"))
                 t.setItem(r, c, item)
@@ -176,7 +176,7 @@ class ProcessesView(QWidget):
         if row < 0 or not self.table.selectedItems():
             return None
         item = self.table.item(row, 0)
-        idx = item.data(Qt.UserRole + 1) if item else None
+        idx = item.data(Qt.ItemDataRole.UserRole + 1) if item else None
         return self._rows[idx] if idx is not None and idx < len(self._rows) else None
 
     def _update_buttons(self) -> None:

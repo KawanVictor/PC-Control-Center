@@ -97,7 +97,7 @@ def _check_widgets() -> str:
         cfg = WidgetConfig(type=type_id)
         r = cls(cfg)
         bw, bh = r.base_size
-        img = QImage(int(bw), int(bh), QImage.Format_ARGB32_Premultiplied)
+        img = QImage(int(bw), int(bh), QImage.Format.Format_ARGB32_Premultiplied)
         img.fill(QColor("#1e293b"))
         p = QPainter(img)
         try:

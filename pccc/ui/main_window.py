@@ -75,7 +75,7 @@ class Background(QWidget):
     def _render(self, pm: QPixmap) -> None:
         t = ThemeManager.instance().theme
         p = QPainter(pm)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         r = self.rect()
         g = QLinearGradient(0, 0, r.width(), r.height())
         g.setColorAt(0, QColor(t.p["bg0"]))
@@ -100,7 +100,7 @@ class NavButton(QPushButton):
         super().__init__()
         self.setObjectName("NavButton")
         self.setCheckable(True)
-        self.setCursor(Qt.PointingHandCursor)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setToolTip(text)
         self.setMinimumHeight(42)
         lay = QHBoxLayout(self)
@@ -109,7 +109,7 @@ class NavButton(QPushButton):
         self.icon_lbl = icon_label(glyph, 12.5, obj="")
         self.text_lbl = QLabel(text)
         for w in (self.icon_lbl, self.text_lbl):
-            w.setAttribute(Qt.WA_TransparentForMouseEvents)
+            w.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             lay.addWidget(w)
         lay.addStretch(1)
         self.toggled.connect(self._restyle)
@@ -163,12 +163,12 @@ class Sidebar(QFrame):
 
         self.toggle = QPushButton()
         self.toggle.setObjectName("NavButton")
-        self.toggle.setCursor(Qt.PointingHandCursor)
+        self.toggle.setCursor(Qt.CursorShape.PointingHandCursor)
         self.toggle.setToolTip("Recolher / expandir menu")
         tlay = QHBoxLayout(self.toggle)
         tlay.setContentsMargins(14, 0, 10, 0)
         ic = icon_label(G.MENU, 12, obj="Muted")
-        ic.setAttribute(Qt.WA_TransparentForMouseEvents)
+        ic.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         tlay.addWidget(ic)
         tlay.addStretch(1)
         self.toggle.setMinimumHeight(40)
@@ -199,7 +199,7 @@ class Sidebar(QFrame):
         for prop in (b"minimumWidth", b"maximumWidth"):
             a = QPropertyAnimation(self, prop)
             a.setDuration(220)
-            a.setEasingCurve(QEasingCurve.OutCubic)
+            a.setEasingCurve(QEasingCurve.Type.OutCubic)
             a.setStartValue(self.width())
             a.setEndValue(target)
             self._anims.addAnimation(a)
@@ -326,8 +326,8 @@ class MainWindow(QMainWindow):
     def _show_balloon(self, title: str, message: str, severity: str) -> None:
         if self.tray is None:
             raise RuntimeError("bandeja indisponível")
-        icon = {"critical": QSystemTrayIcon.Critical, "warning": QSystemTrayIcon.Warning}.get(
-            severity, QSystemTrayIcon.Information)
+        icon = {"critical": QSystemTrayIcon.MessageIcon.Critical, "warning": QSystemTrayIcon.MessageIcon.Warning}.get(
+            severity, QSystemTrayIcon.MessageIcon.Information)
         self.tray.showMessage(title, message, icon, 10_000)
 
     def _set_alert_badge(self, n: int) -> None:
@@ -443,7 +443,7 @@ class MainWindow(QMainWindow):
 
     def _toast(self, title: str, msg: str) -> None:
         if self.tray is not None:
-            self.tray.showMessage(title, msg, QSystemTrayIcon.Information, 3000)
+            self.tray.showMessage(title, msg, QSystemTrayIcon.MessageIcon.Information, 3000)
 
     def _fill_scenes_menu(self) -> None:
         from ..personalization import scenes
@@ -490,7 +490,7 @@ class MainWindow(QMainWindow):
             anim.setDuration(200)
             anim.setStartValue(0.0)
             anim.setEndValue(1.0)
-            anim.setEasingCurve(QEasingCurve.OutCubic)
+            anim.setEasingCurve(QEasingCurve.Type.OutCubic)
             # Remove o efeito no fim: efeitos gráficos deixam a pintura mais lenta.
             anim.finished.connect(lambda: page.setGraphicsEffect(None))
             anim.start()
@@ -562,7 +562,7 @@ class MainWindow(QMainWindow):
         self.tray.show()
 
     def _tray_activated(self, reason) -> None:
-        if reason in (QSystemTrayIcon.Trigger, QSystemTrayIcon.DoubleClick):
+        if reason in (QSystemTrayIcon.ActivationReason.Trigger, QSystemTrayIcon.ActivationReason.DoubleClick):
             if self.isVisible() and not self.isMinimized():
                 self.hide()
             else:
@@ -592,7 +592,7 @@ class MainWindow(QMainWindow):
                 self._tray_hint_shown = True
                 self.tray.showMessage("PC Control Center",
                                       "Continuo monitorando na bandeja. Clique com o botão direito para sair.",
-                                      QSystemTrayIcon.Information, 4000)
+                                      QSystemTrayIcon.MessageIcon.Information, 4000)
             return
         self._save_geometry()
         self.shutdown_pages()

@@ -28,7 +28,7 @@ SIZES = (16, 24, 32, 48, 64, 128, 256)
 def _png(icon, size: int) -> bytes:
     data = QByteArray()
     buf = QBuffer(data)
-    buf.open(QIODevice.WriteOnly)
+    buf.open(QIODevice.OpenModeFlag.WriteOnly)
     icon.pixmap(QSize(size, size)).toImage().save(buf, "PNG")
     buf.close()
     return bytes(data)

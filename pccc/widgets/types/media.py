@@ -56,7 +56,7 @@ class MediaWidget(Renderer):
             c.bar(122, 72, 176, 4, pos / dur * 100)
             c.text(122, 76, 60, 14, f"{int(pos) // 60}:{int(pos) % 60:02d}", 9, color=c.s.muted)
             c.text(238, 76, 60, 14, f"{int(dur) // 60}:{int(dur) % 60:02d}", 9, color=c.s.muted,
-                   align=Qt.AlignRight | Qt.AlignVCenter)
+                   align=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         for rect, aid in self.hit_areas():
             g = {"previous": "", "play_pause": "" if m.playing else "", "next": ""}[aid]
             if aid == "play_pause":

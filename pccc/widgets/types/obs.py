@@ -28,12 +28,12 @@ class ObsWidget(Renderer):
         live_c = RED if st.streaming else c.s.faint
         c.rounded(14, 38, 112, 30, 8, live_c)
         c.text(14, 38, 112, 30, f"AO VIVO {st.stream_time}" if st.streaming else "Offline", 11.5, 700,
-               QColor("white") if st.streaming else c.s.muted, align=Qt.AlignCenter)
+               QColor("white") if st.streaming else c.s.muted, align=Qt.AlignmentFlag.AlignCenter)
         rec = self.hit_areas()[0][0]
         c.rounded(rec.x(), rec.y(), rec.width(), rec.height(), 8, RED if st.recording else c.s.faint)
         c.text(rec.x(), rec.y(), rec.width(), rec.height(),
                f"● REC {st.record_time}" if st.recording else "● Gravar", 11.5, 700,
-               QColor("white") if st.recording else c.s.text, align=Qt.AlignCenter)
+               QColor("white") if st.recording else c.s.text, align=Qt.AlignmentFlag.AlignCenter)
         c.text(14, 76, 252, 18, f"Cena: {st.scene or '—'}", 11.5)
         info = f"CPU do OBS {st.obs_cpu:.0f}%"
         if st.streaming:

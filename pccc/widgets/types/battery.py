@@ -24,7 +24,7 @@ class BatteryWidget(Renderer):
         col = RED if pct < 20 and not b.power_plugged else AMBER if pct < 40 and not b.power_plugged else GREEN
         # corpo da bateria
         c.p.setPen(c.s.muted)
-        c.p.setBrush(Qt.NoBrush)
+        c.p.setBrush(Qt.BrushStyle.NoBrush)
         c.p.drawRoundedRect(QRectF(16, 28, 70, 40), 7, 7)
         c.rounded(87, 40, 5, 16, 2, c.s.muted)
         c.rounded(20, 32, 62 * pct / 100, 32, 4, col)

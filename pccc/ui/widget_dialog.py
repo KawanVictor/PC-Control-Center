@@ -61,7 +61,7 @@ class WidgetConfigDialog(QDialog):
         self._backup = copy.deepcopy(self.cfg.to_dict())
         self.setWindowTitle(f"Configurar — {win.renderer.title}")
         self.setMinimumWidth(520)
-        self.setWindowFlag(Qt.WindowStaysOnTopHint)
+        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
         lay = QVBoxLayout(self)
         lay.setSpacing(12)
         title = QLabel(win.renderer.title)
@@ -73,7 +73,7 @@ class WidgetConfigDialog(QDialog):
         lay.addWidget(desc)
 
         form = QFormLayout()
-        form.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        form.setLabelAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         form.setHorizontalSpacing(16)
         form.setVerticalSpacing(10)
 
@@ -143,9 +143,9 @@ class WidgetConfigDialog(QDialog):
         tip.setWordWrap(True)
         lay.addWidget(tip)
 
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        buttons.button(QDialogButtonBox.Ok).setText("Salvar")
-        buttons.button(QDialogButtonBox.Cancel).setText("Cancelar")
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        buttons.button(QDialogButtonBox.StandardButton.Ok).setText("Salvar")
+        buttons.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         lay.addWidget(buttons)
@@ -160,7 +160,7 @@ class WidgetConfigDialog(QDialog):
 
     def _slider(self, lo, hi, value, on_change, suffix="") -> QWidget:
         row = QHBoxLayout()
-        s = QSlider(Qt.Horizontal)
+        s = QSlider(Qt.Orientation.Horizontal)
         s.setRange(lo, hi)
         s.setValue(max(lo, min(hi, value)))
         lbl = QLabel(f"{s.value()}{suffix}")
@@ -202,7 +202,7 @@ class WidgetConfigDialog(QDialog):
         box = QWidget()
         form = QFormLayout(box)
         form.setContentsMargins(0, 0, 0, 0)
-        form.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        form.setLabelAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         if t == "clock":
             self._check(form, "h24", "Formato 24 horas")
             self._check(form, "seconds", "Mostrar segundos")

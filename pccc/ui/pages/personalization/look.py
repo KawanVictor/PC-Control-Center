@@ -50,7 +50,7 @@ class LookTab:
         for i, c in enumerate(accent.PRESETS):
             b = QPushButton()
             b.setFixedSize(34, 34)
-            b.setCursor(Qt.PointingHandCursor)
+            b.setCursor(Qt.CursorShape.PointingHandCursor)
             b.setToolTip(c)
             b.setStyleSheet(f"QPushButton {{ background: {c}; border-radius: 6px; border: 2px solid transparent; }}"
                             f"QPushButton:hover {{ border-color: white; }}")

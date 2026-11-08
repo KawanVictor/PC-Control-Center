@@ -172,7 +172,7 @@ class InstalledView(QWidget):
         t.setRowCount(len(apps))
         for r, a in enumerate(apps):
             name = SortItem(a.name)
-            name.setData(Qt.UserRole + 1, id(a))
+            name.setData(Qt.ItemDataRole.UserRole + 1, id(a))
             icon = file_icon(a.icon_path) if not a.is_store else None
             if icon:
                 name.setIcon(icon)
@@ -183,11 +183,11 @@ class InstalledView(QWidget):
                      SortItem(date, a.install_date or 0), SortItem(a.category), SortItem(a.source)]
             for c, item in enumerate(cells):
                 if c in (3, 4):
-                    item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 t.setItem(r, c, item)
         t.setSortingEnabled(cat_sort := self.category.currentData() != "__recent__")
         if not cat_sort:
-            t.horizontalHeader().setSortIndicator(-1, Qt.AscendingOrder)
+            t.horizontalHeader().setSortIndicator(-1, Qt.SortOrder.AscendingOrder)
         self._by_id = {id(a): a for a in apps}
 
         visible_all = [a for a in self.apps if not a.system_component]
@@ -203,7 +203,7 @@ class InstalledView(QWidget):
         if row < 0 or not self.table.selectedItems():
             return None
         item = self.table.item(row, 0)
-        return getattr(self, "_by_id", {}).get(item.data(Qt.UserRole + 1)) if item else None
+        return getattr(self, "_by_id", {}).get(item.data(Qt.ItemDataRole.UserRole + 1)) if item else None
 
     def _update_buttons(self) -> None:
         a = self.selected()

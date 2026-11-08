@@ -141,7 +141,7 @@ class WidgetsPage(Page):
             head.addWidget(label(cls.title, "Value"), 1)
             add = QPushButton("Adicionar")
             add.setObjectName("Primary")
-            add.setCursor(Qt.PointingHandCursor)
+            add.setCursor(Qt.CursorShape.PointingHandCursor)
             add.clicked.connect(lambda _=False, t=type_id: self.mgr.add(t))
             head.addWidget(add)
             tile.add(head)
@@ -237,7 +237,7 @@ class WidgetsPage(Page):
     def _delete_profile(self) -> None:
         name = self.mgr.active
         if QMessageBox.question(self, "Excluir perfil", f"Excluir o perfil “{name}” e seus widgets?") \
-                == QMessageBox.Yes:
+                == QMessageBox.StandardButton.Yes:
             try:
                 self.mgr.delete_profile(name)
             except ValueError as e:

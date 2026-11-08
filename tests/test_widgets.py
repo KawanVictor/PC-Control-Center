@@ -61,7 +61,7 @@ def main() -> int:
                                         {"name": "Site", "path": "https://example.com"}]
             for scale in (1, 2):
                 bw, bh = r.base_size
-                img = QImage(int(bw * scale), int(bh * scale), QImage.Format_ARGB32_Premultiplied)
+                img = QImage(int(bw * scale), int(bh * scale), QImage.Format.Format_ARGB32_Premultiplied)
                 img.fill(QColor("#1e293b"))   # simula um papel de parede
                 p = QPainter(img)
                 try:

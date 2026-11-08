@@ -39,4 +39,4 @@ class WifiWidget(Renderer):
                   "offline": ("Offline", RED)}.get(n.status, ("—", c.s.muted))
         c.text(18, 90, 120, 18, f"● {status[0]}", 11, 600, color=status[1])
         c.text(130, 90, 110, 18, f"Ping {p:.0f} ms" if p is not None else "Ping —", 11, color=c.s.muted,
-               align=Qt.AlignRight | Qt.AlignVCenter)
+               align=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)

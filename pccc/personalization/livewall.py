@@ -118,8 +118,8 @@ class _Surface(QWidget):
     """Janela de um monitor: vídeo (QVideoWidget) ou GIF (QMovie)."""
 
     def __init__(self, path: str, rect, host: int) -> None:
-        super().__init__(None, Qt.FramelessWindowHint | Qt.Tool | Qt.WindowDoesNotAcceptFocus)
-        self.setAttribute(Qt.WA_ShowWithoutActivating)
+        super().__init__(None, Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool | Qt.WindowType.WindowDoesNotAcceptFocus)
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self.setStyleSheet("background: black;")
         self.rect_ = rect
         lay = QVBoxLayout(self)
@@ -130,7 +130,7 @@ class _Surface(QWidget):
             from PySide6.QtCore import QSize
             from PySide6.QtGui import QMovie
             self.label = QLabel()
-            self.label.setAlignment(Qt.AlignCenter)
+            self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.movie = QMovie(path)
             self.movie.jumpToFrame(0)
             fs = self.movie.currentImage().size()
@@ -143,7 +143,7 @@ class _Surface(QWidget):
             from PySide6.QtMultimedia import QMediaPlayer
             from PySide6.QtMultimediaWidgets import QVideoWidget
             self.video = QVideoWidget()
-            self.video.setAspectRatioMode(Qt.KeepAspectRatioByExpanding)
+            self.video.setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatioByExpanding)
             lay.addWidget(self.video)
             self.player = QMediaPlayer(self)
             self.player.setVideoOutput(self.video)        # sem saída de áudio = sem som

@@ -31,9 +31,9 @@ def paint_widget(p: QPainter, renderer: Renderer, cfg: WidgetConfig, w: float, h
     """Desenha fundo + conteúdo de um widget no retângulo (0,0,w,h). Usado também na galeria."""
     bw, bh = renderer.base_size
     s = w / bw
-    p.setRenderHint(QPainter.Antialiasing)
-    p.setRenderHint(QPainter.TextAntialiasing)
-    p.setRenderHint(QPainter.SmoothPixmapTransform)
+    p.setRenderHint(QPainter.RenderHint.Antialiasing)
+    p.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+    p.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
     p.save()
     p.scale(s, s)
     bg = QColor(cfg.bg or "#0b1020")
@@ -59,9 +59,9 @@ class DesktopWidgetWindow(QWidget):
         self._resizing = False
         self._pressed_area: str | None = None
         self._hover = False
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setAttribute(Qt.WA_ShowWithoutActivating)
-        self.setAttribute(Qt.WA_NoSystemBackground)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground)
         self.setMouseTracking(True)
         self.apply_layer(show=False)
         self.apply_geometry()
@@ -71,11 +71,11 @@ class DesktopWidgetWindow(QWidget):
 
     # ------------------------------------------------------------ configuração
     def apply_layer(self, show: bool = True) -> None:
-        flags = Qt.FramelessWindowHint | Qt.Tool | Qt.WindowDoesNotAcceptFocus | Qt.NoDropShadowWindowHint
+        flags = Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool | Qt.WindowType.WindowDoesNotAcceptFocus | Qt.WindowType.NoDropShadowWindowHint
         if self.cfg.layer == "top":
-            flags |= Qt.WindowStaysOnTopHint
+            flags |= Qt.WindowType.WindowStaysOnTopHint
         elif self.cfg.layer == "bottom":
-            flags |= Qt.WindowStaysOnBottomHint
+            flags |= Qt.WindowType.WindowStaysOnBottomHint
         was_visible = self.isVisible()
         self.setWindowFlags(flags)
         if show and (was_visible or self.cfg.visible):
@@ -149,7 +149,7 @@ class DesktopWidgetWindow(QWidget):
         return not self.cfg.locked and pos.x() > self.width() - GRIP and pos.y() > self.height() - GRIP
 
     def mousePressEvent(self, e) -> None:
-        if e.button() != Qt.LeftButton:
+        if e.button() != Qt.MouseButton.LeftButton:
             return
         pos = e.position().toPoint()
         if self._in_grip(pos):
@@ -168,21 +168,21 @@ class DesktopWidgetWindow(QWidget):
             self.apply_geometry()
             self.update()
             return
-        if self._drag is not None and e.buttons() & Qt.LeftButton:
+        if self._drag is not None and e.buttons() & Qt.MouseButton.LeftButton:
             target = e.globalPosition().toPoint() - self._drag
             self.move(self._snap(target))
             return
         if self._in_grip(pos):
-            self.setCursor(Qt.SizeFDiagCursor)
+            self.setCursor(Qt.CursorShape.SizeFDiagCursor)
         elif self._area_at(pos):
-            self.setCursor(Qt.PointingHandCursor)
+            self.setCursor(Qt.CursorShape.PointingHandCursor)
         elif not self.cfg.locked:
-            self.setCursor(Qt.SizeAllCursor)
+            self.setCursor(Qt.CursorShape.SizeAllCursor)
         else:
-            self.setCursor(Qt.ArrowCursor)
+            self.setCursor(Qt.CursorShape.ArrowCursor)
 
     def mouseReleaseEvent(self, e) -> None:
-        if e.button() != Qt.LeftButton:
+        if e.button() != Qt.MouseButton.LeftButton:
             return
         if self._resizing or self._drag is not None:
             self.cfg.x, self.cfg.y = self.x(), self.y()
@@ -213,7 +213,7 @@ class DesktopWidgetWindow(QWidget):
 
     def wheelEvent(self, e) -> None:
         # Ctrl + roda do mouse = redimensionar rapidamente
-        if e.modifiers() & Qt.ControlModifier and not self.cfg.locked:
+        if e.modifiers() & Qt.KeyboardModifier.ControlModifier and not self.cfg.locked:
             bw, _ = self.renderer.base_size
             step = 1.08 if e.angleDelta().y() > 0 else 1 / 1.08
             self.cfg.width = int(max(bw * MIN_SCALE, min(bw * MAX_SCALE, self.width() * step)))

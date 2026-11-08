@@ -102,7 +102,7 @@ class StartupView(QWidget):
                 fam = it.command.split(" ")[0]
                 disp = names.get(fam, disp)
             name = SortItem(disp)
-            name.setData(Qt.UserRole + 1, r)
+            name.setData(Qt.ItemDataRole.UserRole + 1, r)
             icon = file_icon(it.exe)
             if icon:
                 name.setIcon(icon)

@@ -45,7 +45,7 @@ class TweakRow(QWidget):
             self.ctrl.setCurrentIndex(max(0, tweak.current_index()))
             self.ctrl.activated.connect(lambda _i: self._apply(self.ctrl.currentData()))
         self.ctrl.setEnabled(tweak.supported)
-        h.addWidget(self.ctrl, 0, Qt.AlignRight | Qt.AlignVCenter)
+        h.addWidget(self.ctrl, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
     def reload(self) -> None:
         self.ctrl.blockSignals(True)

@@ -85,7 +85,7 @@ class FakeObs:
         from PySide6.QtNetwork import QHostAddress
         self.password = password
         self.srv = QWebSocketServer("fake-obs", QWebSocketServer.SslMode.NonSecureMode)
-        assert self.srv.listen(QHostAddress.LocalHost, 0)
+        assert self.srv.listen(QHostAddress.SpecialAddress.LocalHost, 0)
         self.port = self.srv.serverPort()
         self.srv.newConnection.connect(self._new)
         self.clients = []

@@ -68,7 +68,7 @@ class ShortcutsWidget(Renderer):
                 c.rounded(ir.x(), ir.y(), 40, 40, 10, c.s.faint)
                 c.glyph(ir.x(), ir.y(), 40, 40, "" if it.get("path", "").startswith("http") else G.APPS, 16)
             c.text(rect.x() + 2, rect.y() + 48, rect.width() - 4, 22, it.get("name", "")[:14], 10,
-                   align=Qt.AlignHCenter | Qt.AlignTop)
+                   align=Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop)
 
     def hit_areas(self):
         return [(rect, str(i)) for rect, _it, i in self._cells()]

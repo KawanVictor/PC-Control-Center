@@ -67,7 +67,7 @@ class Style:
             f = QFont(family)
             f.setPixelSize(max(6, int(round(px * self.font_scale))))
             f.setWeight(QFont.Weight(weight))
-            f.setHintingPreference(QFont.PreferNoHinting)  # escala suave
+            f.setHintingPreference(QFont.HintingPreference.PreferNoHinting)  # escala suave
             self._fonts[key] = f
         return f
 
@@ -83,17 +83,17 @@ class Canvas:
 
     # ------------------------------------------------------------------ texto
     def text(self, x, y, w, h, s: str, px: float = 12, weight: int = 400, color: QColor | None = None,
-             align=Qt.AlignLeft | Qt.AlignVCenter, family: str = "Segoe UI Variable Display") -> None:
+             align=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, family: str = "Segoe UI Variable Display") -> None:
         font = self.s.font(px, weight, family)
         self.p.setFont(font)
         self.p.setPen(color or self.s.text)
         if "\n" not in s:
             # Linha única: corta com "…" em vez de cortar no meio de uma letra.
-            s = QFontMetricsF(font).elidedText(s, Qt.ElideRight, w)
+            s = QFontMetricsF(font).elidedText(s, Qt.TextElideMode.ElideRight, w)
         self.p.drawText(QRectF(x, y, w, h), int(align), s)
 
     def glyph(self, x, y, w, h, g: str, px: float = 14, color: QColor | None = None,
-              align=Qt.AlignCenter) -> None:
+              align=Qt.AlignmentFlag.AlignCenter) -> None:
         self.p.setFont(self.s.icon(px))
         self.p.setPen(color or self.s.accent)
         self.p.drawText(QRectF(x, y, w, h), int(align), g)
@@ -103,7 +103,7 @@ class Canvas:
              span_deg: float = 270) -> None:
         rect = QRectF(cx - r, cy - r, 2 * r, 2 * r)
         start = 90 + span_deg / 2
-        self.p.setPen(QPen(self.s.faint, width, Qt.SolidLine, Qt.RoundCap))
+        self.p.setPen(QPen(self.s.faint, width, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
         self.p.drawArc(rect, int(start * 16), int(-span_deg * 16))
         v = max(0.0, min(100.0, value or 0.0))
         if v > 0.5:
@@ -111,12 +111,12 @@ class Canvas:
             g = QConicalGradient(rect.center(), start)
             g.setColorAt(0, c)
             g.setColorAt(span_deg / 360, c.lighter(140) if color else self.s.accent2)
-            self.p.setPen(QPen(QBrush(g), width, Qt.SolidLine, Qt.RoundCap))
+            self.p.setPen(QPen(QBrush(g), width, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
             self.p.drawArc(rect, int(start * 16), int(-span_deg * v / 100 * 16))
 
     def bar(self, x, y, w, h, value: float, color: QColor | None = None) -> None:
         r = h / 2
-        self.p.setPen(Qt.NoPen)
+        self.p.setPen(Qt.PenStyle.NoPen)
         self.p.setBrush(self.s.faint)
         self.p.drawRoundedRect(QRectF(x, y, w, h), r, r)
         v = max(0.0, min(100.0, value or 0.0))
@@ -153,15 +153,15 @@ class Canvas:
             bot_c.setAlphaF(0.0)
             g.setColorAt(0, top_c)
             g.setColorAt(1, bot_c)
-            self.p.setPen(Qt.NoPen)
+            self.p.setPen(Qt.PenStyle.NoPen)
             self.p.setBrush(QBrush(g))
             self.p.drawPath(area)
-        self.p.setBrush(Qt.NoBrush)
-        self.p.setPen(QPen(c, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+        self.p.setBrush(Qt.BrushStyle.NoBrush)
+        self.p.setPen(QPen(c, 1.6, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap, Qt.PenJoinStyle.RoundJoin))
         self.p.drawPath(path)
 
     def rounded(self, x, y, w, h, r, color: QColor) -> None:
-        self.p.setPen(Qt.NoPen)
+        self.p.setPen(Qt.PenStyle.NoPen)
         self.p.setBrush(color)
         self.p.drawRoundedRect(QRectF(x, y, w, h), r, r)
 

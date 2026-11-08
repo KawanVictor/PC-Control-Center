@@ -26,7 +26,7 @@ def hub() -> DataHub:
 
 
 def no_data(c: Canvas, msg: str = "Aguardando dados...") -> None:
-    c.text(0, 0, c.w, c.h, msg, 12, color=c.s.muted, align=Qt.AlignCenter)
+    c.text(0, 0, c.w, c.h, msg, 12, color=c.s.muted, align=Qt.AlignmentFlag.AlignCenter)
 
 
 # ======================================================== 4–6. CPU / RAM / GPU (anel + gráfico)
@@ -46,8 +46,8 @@ class RingWidget(Renderer):
             return
         pct, lines = v
         c.ring(56, 62, 40, pct, 8)
-        c.text(16, 42, 80, 30, f"{pct:.0f}%", 20, 600, align=Qt.AlignCenter)
-        c.text(16, 66, 80, 18, self.label, 10.5, 600, color=c.s.muted, align=Qt.AlignCenter)
+        c.text(16, 42, 80, 30, f"{pct:.0f}%", 20, 600, align=Qt.AlignmentFlag.AlignCenter)
+        c.text(16, 66, 80, 18, self.label, 10.5, 600, color=c.s.muted, align=Qt.AlignmentFlag.AlignCenter)
         for i, line in enumerate(lines[:3]):
             c.text(110, 16 + i * 20, 130, 20, line, 12 if i else 13.5, 600 if i == 0 else 400,
                    color=c.s.text if i == 0 else c.s.muted)

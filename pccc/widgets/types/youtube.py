@@ -47,10 +47,10 @@ class YouTubeWidget(Renderer):
             c.p.restore()
         else:
             c.rounded(art.x(), art.y(), art.width(), art.height(), 10, c.s.faint)
-        c.text(182, 10, 138, 56, v.title, 11.5, 600, align=Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap)
+        c.text(182, 10, 138, 56, v.title, 11.5, 600, align=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop | Qt.TextFlag.TextWordWrap)
         c.text(182, 70, 138, 16, v.channel, 10, color=c.s.accent)
         c.text(182, 86, 138, 16, ago(v.published), 10, color=c.s.muted)
-        c.text(12, 108, 160, 18, f"{self.index + 1} de {len(vids)}", 9.5, color=c.s.muted, align=Qt.AlignCenter)
+        c.text(12, 108, 160, 18, f"{self.index + 1} de {len(vids)}", 9.5, color=c.s.muted, align=Qt.AlignmentFlag.AlignCenter)
         for rect, aid in self.hit_areas()[1:]:
             c.glyph(rect.x(), rect.y(), rect.width(), rect.height(), "" if aid == "prev" else "", 11,
                     c.s.text)

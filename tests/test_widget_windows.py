@@ -56,11 +56,11 @@ def main() -> int:
 
         # arrastar o widget de CPU 300 px para a esquerda
         before = cpu.pos()
-        QTest.mousePress(cpu, Qt.LeftButton, Qt.NoModifier, QPoint(30, 30))
+        QTest.mousePress(cpu, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, QPoint(30, 30))
         for dx in range(0, -301, -30):
             QTest.mouseMove(cpu, QPoint(30 + dx, 30))
             app.processEvents()
-        QTest.mouseRelease(cpu, Qt.LeftButton, Qt.NoModifier, QPoint(-270, 30))
+        QTest.mouseRelease(cpu, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, QPoint(-270, 30))
         results["arrastar move e salva posição"] = cpu.x() < before.x() - 200 and cpu.cfg.x == cpu.x()
 
         # encaixe na borda direita da tela
@@ -71,22 +71,22 @@ def main() -> int:
         # Ctrl + roda do mouse aumenta
         w0 = clock.width()
         ev = QWheelEvent(QPointF(10, 10), QPointF(clock.mapToGlobal(QPoint(10, 10))), QPoint(0, 0),
-                         QPoint(0, 120), Qt.NoButton, Qt.ControlModifier, Qt.ScrollUpdate, False)
+                         QPoint(0, 120), Qt.MouseButton.NoButton, Qt.KeyboardModifier.ControlModifier, Qt.ScrollPhase.ScrollUpdate, False)
         QApplication.sendEvent(clock, ev)
         results["Ctrl+roda redimensiona mantendo proporção"] = (
             clock.width() > w0 and abs(clock.height() / clock.width() - 118 / 270) < 0.02)
 
         # clique no botão "próximo mês" do calendário
         s = cal.width() / 262
-        QTest.mouseClick(cal, Qt.LeftButton, Qt.NoModifier, QPoint(int(240 * s), int(23 * s)))
+        QTest.mouseClick(cal, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, QPoint(int(240 * s), int(23 * s)))
         results["clique em botão do widget (calendário → próximo mês)"] = cal.renderer.offset == 1
 
         # bloquear impede arrastar
         cal.cfg.locked = True
         p0 = cal.pos()
-        QTest.mousePress(cal, Qt.LeftButton, Qt.NoModifier, QPoint(100, 120))
+        QTest.mousePress(cal, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, QPoint(100, 120))
         QTest.mouseMove(cal, QPoint(20, 120))
-        QTest.mouseRelease(cal, Qt.LeftButton, Qt.NoModifier, QPoint(20, 120))
+        QTest.mouseRelease(cal, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, QPoint(20, 120))
         results["bloqueado não se move"] = cal.pos() == p0
 
         for w in (cal, cpu, clock):

@@ -23,7 +23,7 @@ def label(text: str = "", obj: str | None = None, wrap: bool = False) -> QLabel:
     if obj:
         lb.setObjectName(obj)
         if obj.startswith("Badge"):  # selos não esticam na vertical
-            lb.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+            lb.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
     lb.setWordWrap(wrap)
     return lb
 
@@ -88,10 +88,10 @@ class RingGauge(QWidget):
         self._font_side = -1
         self._static: dict[tuple, QStaticText] = {}
         self.setMinimumSize(size, size)
-        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self._anim = QVariantAnimation(self)
         self._anim.setDuration(280)
-        self._anim.setEasingCurve(QEasingCurve.OutCubic)
+        self._anim.setEasingCurve(QEasingCurve.Type.OutCubic)
         self._anim.valueChanged.connect(self._on_anim)
         ThemeManager.instance().changed.connect(lambda _t: self.update())
         animations_on = Settings.instance().get("appearance.animations", True)
@@ -130,9 +130,9 @@ class RingGauge(QWidget):
         rect = QRectF((self.width() - side) / 2 + pw, (self.height() - side) / 2 + pw,
                       side - 2 * pw, side - 2 * pw)
         p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        track = QPen(t.color("faint"), pw, Qt.SolidLine, Qt.RoundCap)
+        track = QPen(t.color("faint"), pw, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
         c = QColor(t.p["faint"])
         c.setAlpha(55)
         track.setColor(c)
@@ -143,7 +143,7 @@ class RingGauge(QWidget):
         grad = QConicalGradient(rect.center(), 225)
         grad.setColorAt(0.0, base)
         grad.setColorAt(0.75, QColor(t.accent2) if not self._color else base.lighter(130))
-        pen = QPen(QBrush(grad), pw, Qt.SolidLine, Qt.RoundCap)
+        pen = QPen(QBrush(grad), pw, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
         p.setPen(pen)
         span = -270 * self._value / 100.0
         if self._value > 0.3:
@@ -155,7 +155,7 @@ class RingGauge(QWidget):
             self._font_side = side
             self._f_value = QFont("Segoe UI Variable Display")
             self._f_value.setPixelSize(max(12, int(side * 0.2)))
-            self._f_value.setWeight(QFont.DemiBold)
+            self._f_value.setWeight(QFont.Weight.DemiBold)
             self._f_caption = QFont("Segoe UI")
             self._f_caption.setPixelSize(max(9, int(side * 0.085)))
             self._static.clear()
@@ -220,7 +220,7 @@ class LiveChart(pg.PlotWidget):
             item = pg.PlotDataItem(pen=pg.mkPen(color, width=2))
             if fill:
                 g = QLinearGradient(0, 0, 0, 1)
-                g.setCoordinateMode(QLinearGradient.ObjectBoundingMode)
+                g.setCoordinateMode(QLinearGradient.CoordinateMode.ObjectBoundingMode)
                 top = QColor(color)
                 top.setAlpha(90 if len(series) == 1 else 45)
                 bot = QColor(color)
@@ -287,7 +287,7 @@ class MetricCard(GlassCard):
         row.addWidget(self.value)
         row.addStretch(1)
         self.side = label("", "Muted")
-        self.side.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.side.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         row.addWidget(self.side)
         self.add(row)
 
@@ -337,7 +337,7 @@ class CoreBars(QWidget):
             return
         t = ThemeManager.instance().theme
         p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         n = len(self._values)
         gap = 6
         label_h = 16
@@ -350,7 +350,7 @@ class CoreBars(QWidget):
         p.setFont(f)
         for i, v in enumerate(self._values):
             x = i * (w + gap)
-            p.setPen(Qt.NoPen)
+            p.setPen(Qt.PenStyle.NoPen)
             p.setBrush(track)
             p.drawRoundedRect(QRectF(x, 0, w, h), 4, 4)
             bh = h * max(0.0, min(100.0, v)) / 100
@@ -362,7 +362,7 @@ class CoreBars(QWidget):
                 p.setBrush(QBrush(g))
                 p.drawRoundedRect(QRectF(x, h - bh, w, bh), 4, 4)
             p.setPen(t.color("muted"))
-            p.drawText(QRectF(x - 4, h + 2, w + 8, label_h), Qt.AlignCenter, f"{v:.0f}")
+            p.drawText(QRectF(x - 4, h + 2, w + 8, label_h), Qt.AlignmentFlag.AlignCenter, f"{v:.0f}")
         p.end()
 
 
@@ -440,8 +440,8 @@ class Segmented(QWidget):
             b.setCheckable(True)
             # pode encolher um pouco em janelas estreitas (evita estourar a largura da página)
             b.setMinimumWidth(b.fontMetrics().horizontalAdvance(text) + 16)
-            b.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-            b.setCursor(Qt.PointingHandCursor)
+            b.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+            b.setCursor(Qt.CursorShape.PointingHandCursor)
             b.setProperty("key", key)
             self._group.addButton(b)
             lay.addWidget(b)
@@ -464,12 +464,12 @@ class ToggleSwitch(QCheckBox):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setCursor(Qt.PointingHandCursor)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setFixedSize(44, 24)
         self._pos = 0.0
         self._anim = QVariantAnimation(self)
         self._anim.setDuration(160)
-        self._anim.setEasingCurve(QEasingCurve.OutCubic)
+        self._anim.setEasingCurve(QEasingCurve.Type.OutCubic)
         self._anim.valueChanged.connect(self._on_anim)
         self.toggled.connect(self._animate)
         ThemeManager.instance().changed.connect(lambda _t: self.update())
@@ -496,7 +496,7 @@ class ToggleSwitch(QCheckBox):
     def paintEvent(self, _e) -> None:
         t = ThemeManager.instance().theme
         p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
         r = QRectF(1, 1, self.width() - 2, self.height() - 2)
         off = QColor(t.p["faint"])
         off.setAlpha(90)
@@ -510,7 +510,7 @@ class ToggleSwitch(QCheckBox):
             p.setBrush(QBrush(g) if self._pos > 0.5 else off)
         else:
             p.setBrush(off)
-        p.setPen(Qt.NoPen)
+        p.setPen(Qt.PenStyle.NoPen)
         p.drawRoundedRect(r, r.height() / 2, r.height() / 2)
         d = r.height() - 6
         x = r.left() + 3 + (r.width() - d - 6) * self._pos
@@ -528,15 +528,15 @@ class DataTable(QTableWidget):
         self.verticalHeader().hide()
         self.setShowGrid(False)
         self.setAlternatingRowColors(True)
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.setFocusPolicy(Qt.NoFocus)
+        self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.verticalHeader().setDefaultSectionSize(30)
         hh = self.horizontalHeader()
         hh.setHighlightSections(False)
         for i in range(len(headers)):
-            hh.setSectionResizeMode(i, QHeaderView.Stretch if i == stretch_col else QHeaderView.ResizeToContents)
-        hh.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+            hh.setSectionResizeMode(i, QHeaderView.ResizeMode.Stretch if i == stretch_col else QHeaderView.ResizeMode.ResizeToContents)
+        hh.setDefaultAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
     def set_rows(self, rows: list[list[str]], align_right_from: int = 1) -> None:
         self.setUpdatesEnabled(False)
@@ -549,7 +549,7 @@ class DataTable(QTableWidget):
                     self.setItem(r, c, item)
                 item.setText(str(text))
                 if c >= align_right_from:
-                    item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         self.setUpdatesEnabled(True)
 
 

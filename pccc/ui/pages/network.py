@@ -41,7 +41,7 @@ def _grid(names: list[str], cols: int) -> tuple[QGridLayout, dict]:
     out = {}
     for i, n in enumerate(names):
         w, v = stat_block(n)
-        v.setTextInteractionFlags(Qt.TextSelectableByMouse)  # permite copiar IPs etc.
+        v.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)  # permite copiar IPs etc.
         g.addWidget(w, i // cols, i % cols)
         out[n] = v
     return g, out
@@ -99,7 +99,7 @@ class NetworkPage(Page):
         col = QVBoxLayout()
         col.setSpacing(4)
         self.ssid = label("—", "BigValue")
-        self.ssid.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.ssid.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.wifi_sub = label("", "Muted", wrap=True)
         col.addStretch(1)
         col.addWidget(self.ssid)
@@ -185,7 +185,7 @@ class NetworkPage(Page):
         # ---- linha 3: detalhes da interface --------------------------------------
         det = GlassCard("Detalhes da conexão", G.INFO)
         self.iface_combo = QComboBox()
-        self.iface_combo.setSizeAdjustPolicy(QComboBox.AdjustToContents)
+        self.iface_combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
         self.iface_combo.activated.connect(self._pick_iface)
         det.add_header_widget(self.iface_combo)
         g, self.dt = _grid(["Interface", "Status", "Tipo", "Adaptador",
@@ -234,12 +234,12 @@ class NetworkPage(Page):
         btns = QHBoxLayout()
         self.sp_btn = QPushButton("Iniciar teste")
         self.sp_btn.setObjectName("Primary")
-        self.sp_btn.setCursor(Qt.PointingHandCursor)
+        self.sp_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.sp_btn.clicked.connect(self._toggle_speedtest)
         btns.addWidget(self.sp_btn)
         btns.addStretch(1)
         self.sp_ip = label("", "Faint")
-        self.sp_ip.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.sp_ip.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         btns.addWidget(self.sp_ip)
         sp.add(btns)
         sp.add(label("Servidor: Cloudflare (o mais próximo). Duração ~16 s. Em conexões rápidas consome "

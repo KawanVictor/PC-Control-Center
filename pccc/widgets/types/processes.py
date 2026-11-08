@@ -32,5 +32,5 @@ class ProcessWidget(Renderer):
             val = a.cpu if by_cpu else a.memory
             c.text(14, y, 150, 16, a.name.replace(".exe", "")[:20], 11.5)
             c.text(160, y, 88, 16, f"{a.cpu:.1f}%".replace(".", ",") if by_cpu else fmt_bytes(a.memory), 11, 600,
-                   align=Qt.AlignRight | Qt.AlignVCenter)
+                   align=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             c.bar(14, y + 17, 234, 3.5, (val / top * 100) if by_cpu and top < 100 else (val / top * 100))

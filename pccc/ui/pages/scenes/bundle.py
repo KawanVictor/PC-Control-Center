@@ -42,9 +42,9 @@ class ImportDialog(QDialog):
         lay.addWidget(label("Mudanças no Windows (tema, cor, papel de parede) entram no Histórico de "
                             "personalização e podem ser desfeitas.", "Faint", wrap=True))
         lay.addStretch(1)
-        bb = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        bb.button(QDialogButtonBox.Ok).setText("Importar")
-        bb.button(QDialogButtonBox.Cancel).setText("Cancelar")
+        bb = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        bb.button(QDialogButtonBox.StandardButton.Ok).setText("Importar")
+        bb.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         bb.accepted.connect(self.accept)
         bb.rejected.connect(self.reject)
         lay.addWidget(bb)

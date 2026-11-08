@@ -99,7 +99,7 @@ def parse(text: str) -> tuple[int, int]:
 
 
 def normalize(seq: QKeySequence | str) -> str:
-    text = seq.toString(QKeySequence.PortableText) if isinstance(seq, QKeySequence) else str(seq)
+    text = seq.toString(QKeySequence.SequenceFormat.PortableText) if isinstance(seq, QKeySequence) else str(seq)
     return text.split(",")[0].strip()
 
 

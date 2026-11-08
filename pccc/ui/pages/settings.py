@@ -32,7 +32,7 @@ def _row(title: str, desc: str, control: QWidget) -> QWidget:
     if desc:
         col.addWidget(label(desc, "Faint", wrap=True))
     h.addLayout(col, 1)
-    h.addWidget(control, 0, Qt.AlignRight | Qt.AlignVCenter)
+    h.addWidget(control, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
     return w
 
 
@@ -59,7 +59,7 @@ class SettingsPage(Page):
             b = QPushButton()
             b.setObjectName("Swatch")
             b.setToolTip(ACCENT_LABELS[key])
-            b.setCursor(Qt.PointingHandCursor)
+            b.setCursor(Qt.CursorShape.PointingHandCursor)
             b.setStyleSheet(f"QPushButton#Swatch {{ background: qlineargradient(x1:0,y1:0,x2:1,y2:1,"
                             f"stop:0 {c1}, stop:1 {c2}); border: 2px solid transparent; }}"
                             f"QPushButton#Swatch:hover {{ border-color: white; }}")
@@ -67,7 +67,7 @@ class SettingsPage(Page):
             sl.addWidget(b)
         ap.add(_row("Cor de destaque", "", sw))
 
-        self.transp = QSlider(Qt.Horizontal)
+        self.transp = QSlider(Qt.Orientation.Horizontal)
         self.transp.setRange(0, 100)
         self.transp.setFixedWidth(200)
         self.transp.setValue(int(float(self.s.get("appearance.transparency", 0.7)) * 100))
@@ -123,7 +123,7 @@ class SettingsPage(Page):
         self.ping_host.setMinimumWidth(170)
         for host, desc in (("1.1.1.1", "Cloudflare"), ("8.8.8.8", "Google"), ("208.67.222.222", "OpenDNS")):
             self.ping_host.addItem(host)
-            self.ping_host.setItemData(self.ping_host.count() - 1, desc, Qt.ToolTipRole)
+            self.ping_host.setItemData(self.ping_host.count() - 1, desc, Qt.ItemDataRole.ToolTipRole)
         self.ping_host.setCurrentText(self.s.get("network.ping_host", "1.1.1.1"))
         self.ping_host.lineEdit().editingFinished.connect(self._set_ping_host)
         self.ping_host.activated.connect(lambda _i: self._set_ping_host())
@@ -209,7 +209,7 @@ class SettingsPage(Page):
     def _reset(self) -> None:
         res = QMessageBox.question(self, "Restaurar padrões",
                                    "Todas as configurações voltarão ao padrão. O histórico não será apagado. Continuar?")
-        if res == QMessageBox.Yes:
+        if res == QMessageBox.StandardButton.Yes:
             self.s.reset()
             log_operation("settings.reset")
             QMessageBox.information(self, "Restaurar padrões",

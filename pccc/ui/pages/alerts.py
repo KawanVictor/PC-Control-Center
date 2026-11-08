@@ -177,7 +177,7 @@ class AlertsPage(Page):
             QMessageBox.information(self, "Notificações", f"O balão não foi exibido agora: {reason}.")
 
     def _clear(self) -> None:
-        if QMessageBox.question(self, "Limpar histórico", "Apagar todo o histórico de alertas?") == QMessageBox.Yes:
+        if QMessageBox.question(self, "Limpar histórico", "Apagar todo o histórico de alertas?") == QMessageBox.StandardButton.Yes:
             store.clear_alerts()
             self.engine.unread_changed.emit(0)
             self._load_alerts()
@@ -325,7 +325,7 @@ class AlertsPage(Page):
             bar.setTextVisible(False)
             v = label("—", "Muted")
             v.setFixedWidth(50)
-            v.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            v.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             r.addWidget(n)
             r.addWidget(bar, 1)
             r.addWidget(v)
@@ -358,7 +358,7 @@ class AlertsPage(Page):
         from ...core.winapi import shell_open
         if target == "mdsched.exe" and QMessageBox.question(
                 self, name, "O Diagnóstico de Memória pede para reiniciar o computador para testar a RAM. Abrir?") \
-                != QMessageBox.Yes:
+                != QMessageBox.StandardButton.Yes:
             return
         shell_open(target, args)
 
@@ -388,7 +388,7 @@ class AlertsPage(Page):
             h.setContentsMargins(0, 4, 0, 4)
             dot = icon_label("", 10, obj="")
             dot.setStyleSheet(f"color: {SEV_COLOR.get(sg.severity)};")
-            h.addWidget(dot, 0, Qt.AlignTop)
+            h.addWidget(dot, 0, Qt.AlignmentFlag.AlignTop)
             col = QVBoxLayout()
             col.setSpacing(2)
             t = label(f"{sg.title}  ·  {SEV_TEXT.get(sg.severity)}", "Value")

@@ -22,7 +22,7 @@ class VideoCard(QFrame):
     def __init__(self, v: yt.Video, thumb: bytes) -> None:
         super().__init__()
         self.setObjectName("VideoCard")
-        self.setCursor(Qt.PointingHandCursor)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.url = v.url
         self.setToolTip(v.title)
         lay = QVBoxLayout(self)
@@ -30,11 +30,11 @@ class VideoCard(QFrame):
         lay.setSpacing(4)
         img = QLabel()
         img.setFixedHeight(124)
-        img.setAlignment(Qt.AlignCenter)
+        img.setAlignment(Qt.AlignmentFlag.AlignCenter)
         qi = QImage.fromData(thumb) if thumb else QImage()
         if not qi.isNull():
-            img.setPixmap(QPixmap.fromImage(qi.scaled(220, 124, Qt.KeepAspectRatioByExpanding,
-                                                      Qt.SmoothTransformation)))
+            img.setPixmap(QPixmap.fromImage(qi.scaled(220, 124, Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                                                      Qt.TransformationMode.SmoothTransformation)))
         img.setStyleSheet("border-radius: 8px; background: rgba(255,255,255,0.05);")
         lay.addWidget(img)
         t = label(v.title, wrap=True)
@@ -45,7 +45,7 @@ class VideoCard(QFrame):
             lay.addWidget(label(yt.fmt_views(v.views), "Faint"))
 
     def mouseReleaseEvent(self, e) -> None:
-        if e.button() == Qt.LeftButton:
+        if e.button() == Qt.MouseButton.LeftButton:
             shell_open(self.url)
 
 

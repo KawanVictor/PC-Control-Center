@@ -31,5 +31,5 @@ class TempWidget(Renderer):
             c.text(14, y, 70, 18, name[:10], 11.5, color=c.s.muted)
             c.bar(76, y + 6, 110, 6, (v or 0) / 1.1, col)
             c.text(190, y, 50, 18, f"{v:.0f}°" if v is not None else "N/D", 12, 600, color=col,
-                   align=Qt.AlignRight | Qt.AlignVCenter)
+                   align=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         c.spark(14, 104, 222, 22, hub().hist["cpu_temp"], RED, vmax=110)

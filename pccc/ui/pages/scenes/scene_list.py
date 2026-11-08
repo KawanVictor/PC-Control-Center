@@ -53,9 +53,9 @@ class SceneEditor(QDialog):
         outer.addWidget(scroll, 1)
         self.rows: dict[str, tuple[QCheckBox, callable]] = {}
         self._build()
-        bb = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
-        bb.button(QDialogButtonBox.Save).setText("Salvar")
-        bb.button(QDialogButtonBox.Cancel).setText("Cancelar")
+        bb = QDialogButtonBox(QDialogButtonBox.StandardButton.Save | QDialogButtonBox.StandardButton.Cancel)
+        bb.button(QDialogButtonBox.StandardButton.Save).setText("Salvar")
+        bb.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         bb.accepted.connect(self._save)
         bb.rejected.connect(self.reject)
         outer.addWidget(bb)

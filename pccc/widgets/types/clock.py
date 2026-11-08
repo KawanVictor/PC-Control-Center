@@ -22,7 +22,7 @@ class ClockWidget(Renderer):
         hm = now.strftime("%H:%M") if self.opt["h24"] else now.strftime("%I:%M").lstrip("0")
         has_date = self.opt["show_date"]
         y = 6 if has_date else 18
-        c.text(18, y, 190, 70, hm, 58, 600, align=Qt.AlignLeft | Qt.AlignVCenter)
+        c.text(18, y, 190, 70, hm, 58, 600, align=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         right = []
         if self.opt["seconds"]:
             right.append(now.strftime("%S"))
@@ -32,7 +32,7 @@ class ClockWidget(Renderer):
             # logo após os números grandes, alinhado à base deles
             from PySide6.QtGui import QFontMetricsF
             sx = min(18 + QFontMetricsF(c.s.font(58, 600)).horizontalAdvance(hm) + 8, 214)
-            c.text(sx, y + 30, 60, 30, right[0], 22, 500, color=c.s.accent, align=Qt.AlignLeft | Qt.AlignBottom)
+            c.text(sx, y + 30, 60, 30, right[0], 22, 500, color=c.s.accent, align=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignBottom)
             if len(right) > 1:
                 c.text(sx, y + 10, 60, 20, right[1], 13, 600, color=c.s.muted)
         if has_date:

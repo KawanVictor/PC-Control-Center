@@ -177,7 +177,7 @@ class GpuView(QWidget):
 
         main = GlassCard("Placa de vídeo", G.GPU)
         self.selector = QComboBox()
-        self.selector.setSizeAdjustPolicy(QComboBox.AdjustToContents)
+        self.selector.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
         self.selector.currentIndexChanged.connect(lambda i: setattr(self, "_index", max(0, i)))
         main.add_header_widget(self.selector)
         self.chart = LiveChart([("gpu", "GPU", SERIES["gpu"])], y_max=100, show_axis=True,
@@ -217,7 +217,7 @@ class GpuView(QWidget):
             bar.setRange(0, 1000)
             v = label("0%", "Muted")
             v.setFixedWidth(46)
-            v.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            v.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             h.addWidget(n)
             h.addWidget(bar, 1)
             h.addWidget(v)
