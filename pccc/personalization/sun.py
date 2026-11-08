@@ -53,7 +53,7 @@ def is_daytime(now: datetime | None = None, loc: dict | None = None) -> bool:
     now = now or datetime.now()
     loc = loc or location()
     rise, set_ = sun_times(float(loc["lat"]), float(loc["lon"]), now.date())
-    if rise is None:
+    if rise is None or set_ is None:
         # sol da meia-noite ou noite polar: decide pela estação
         return 3 < now.month < 10 if float(loc["lat"]) > 0 else not (3 < now.month < 10)
     return rise <= now < set_

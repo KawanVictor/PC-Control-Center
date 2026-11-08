@@ -169,7 +169,8 @@ class FrameStats:
 
     @staticmethod
     def _recent(frames: deque, window_ms: float) -> list[float]:
-        out, total = [], 0.0
+        out: list[float] = []
+        total = 0.0
         for ft in reversed(frames):
             if total + ft > window_ms and out:
                 break
@@ -179,7 +180,7 @@ class FrameStats:
 
     def summary(self, now: float | None = None) -> list[dict]:
         now = time.monotonic() if now is None else now
-        out = []
+        out: list[dict] = []
         for pid, p in list(self.procs.items()):
             if now - p.last_seen > 3.0:
                 del self.procs[pid]
@@ -198,7 +199,7 @@ class FrameStats:
                 p.last_hist = now
             out.append({"pid": pid, "name": p.name, "fps": round(fps, 1), "frame_ms": round(sum(last) / len(last), 2),
                         "low1": round(low1, 1), "history": list(p.history)})
-        out.sort(key=lambda d: d["fps"], reverse=True)
+        out.sort(key=lambda d: float(d["fps"]), reverse=True)
         return out
 
 
@@ -253,7 +254,7 @@ def helper_main(argv: list[str]) -> int:
     lock = threading.Lock()
 
     def reader():
-        for row in csv.reader(proc.stdout):
+        for row in csv.reader(proc.stdout or ()):
             with lock:
                 stats.add(row)
 
@@ -262,7 +263,7 @@ def helper_main(argv: list[str]) -> int:
         while True:
             time.sleep(0.5)
             if proc.poll() is not None:
-                err = (proc.stderr.read() or "").strip().splitlines()
+                err = ((proc.stderr.read() if proc.stderr else "") or "").strip().splitlines()
                 report(running=False, error="O PresentMon encerrou: " + (" ".join(err[-3:]) or f"código {proc.returncode}"))
                 return 1
             if stop_path.exists() or not _pid_alive(parent):

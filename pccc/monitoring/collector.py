@@ -84,6 +84,7 @@ class MonitorWorker(QObject):
             self._disk_io = DiskIoMonitor()
             self._net_io = NetIoMonitor()
             self._procs = ProcessMonitor()
+            self._temps: TemperatureMonitor | None
             try:
                 self._temps = TemperatureMonitor()
             except Exception as e:

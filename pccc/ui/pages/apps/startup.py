@@ -15,6 +15,7 @@ from ...components import GlassCard, label
 from ...icons import G
 from ...tasks import run_task
 from ..common import SortItem, ask, file_icon, make_table
+from ...qtutil import qapp
 
 if TYPE_CHECKING:
     from . import AppsPage
@@ -120,7 +121,8 @@ class StartupView(QWidget):
         row = self.table.currentRow()
         if row < 0 or not self.table.selectedItems():
             return None
-        idx = self.table.item(row, 0).data(Qt.UserRole + 1)
+        cell = self.table.item(row, 0)
+        idx = cell.data(Qt.ItemDataRole.UserRole + 1) if cell is not None else None
         return self.items[idx] if idx is not None and idx < len(self.items) else None
 
     def _update_buttons(self) -> None:
@@ -157,9 +159,8 @@ class StartupView(QWidget):
                     f"“{it.display_name}” é um item de todos os usuários. Alterá-lo exige administrador.",
                     "Deseja reabrir o PC Control Center como administrador?", "Reabrir como administrador"):
                 if relaunch_as_admin():
-                    from PySide6.QtWidgets import QApplication
-                    QApplication.instance().setProperty("force_quit", True)
-                    QApplication.instance().quit()
+                    qapp().setProperty("force_quit", True)
+                    qapp().quit()
             return
         except OSError as e:
             QMessageBox.warning(self, "Inicialização", f"Não foi possível alterar: {e}")

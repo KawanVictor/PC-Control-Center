@@ -15,6 +15,7 @@ from ..components import GlassCard, ResponsiveGrid, ToggleSwitch, icon_label, la
 from ..icons import G
 from ..theme import ThemeManager
 from .base import Page
+from ..qtutil import clear_layout
 
 
 class PreviewTile(QWidget):
@@ -183,10 +184,7 @@ class WidgetsPage(Page):
         self.all_toggle.setChecked(not self.mgr.hidden_all)
         self.all_toggle.blockSignals(False)
 
-        while self.rows_box.count():
-            item = self.rows_box.takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
+        clear_layout(self.rows_box)
         wins = list(self.mgr.windows.values())
         self.empty.setVisible(not wins)
         self.count_badge.setText(f"{len(wins)} widget(s) · perfil “{self.mgr.active}”")

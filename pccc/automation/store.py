@@ -63,7 +63,7 @@ def save_alert(a: Alert) -> int:
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (int(a.ts), a.kind, a.severity, a.title, a.message, a.value, a.action, int(a.notified)))
         d._conn.commit()
-        a.id = cur.lastrowid
+        a.id = cur.lastrowid or 0
         return a.id
 
 

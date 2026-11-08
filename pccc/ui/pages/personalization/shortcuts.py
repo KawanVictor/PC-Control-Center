@@ -11,9 +11,10 @@ from ....personalization import changes, shortcuts
 from ...components import ResponsiveGrid, label
 from ...icons import G
 from ..common import ask, make_table
+from ._tab import PersonalizationTab
 
 
-class ShortcutsTab:
+class ShortcutsTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # =================================================================== ATALHOS

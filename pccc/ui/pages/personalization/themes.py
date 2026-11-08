@@ -12,9 +12,10 @@ from ...icons import G
 from ...tasks import run_task
 from ..common import ask
 from .wallpaper import _thumbs
+from ._tab import PersonalizationTab
 
 
-class ThemesTab:
+class ThemesTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # =================================================================== TEMAS

@@ -16,6 +16,7 @@ log = get_logger("wifi")
 
 ERROR_SUCCESS = 0
 ERROR_ACCESS_DENIED = 5
+ERROR_NOT_READY = 21
 
 OPCODE_CURRENT_CONNECTION = 7
 OPCODE_CHANNEL_NUMBER = 8
@@ -80,6 +81,7 @@ def _band(channel: int | None, phy: int) -> str:
 class WifiReader:
     def __init__(self) -> None:
         self._handle = None
+        self._dll: ctypes.WinDLL | None
         try:
             self._dll = ctypes.WinDLL("wlanapi")
         except OSError:
@@ -105,6 +107,8 @@ class WifiReader:
     def _query(self, guid: GUID, opcode: int):
         size = wintypes.DWORD()
         data = ctypes.c_void_p()
+        if self._dll is None:
+            return ERROR_NOT_READY, data
         rc = self._dll.WlanQueryInterface(self._handle, ctypes.byref(guid), opcode, None,
                                           ctypes.byref(size), ctypes.byref(data), None)
         return rc, data

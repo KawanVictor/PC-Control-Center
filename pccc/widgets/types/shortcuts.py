@@ -18,7 +18,7 @@ from ._common import no_data
 _icon_provider: QFileIconProvider | None = None
 
 
-_icon_cache: dict[str, QPixmap] = {}
+_icon_cache: dict[str, QPixmap | None] = {}
 
 
 def _icon_for(path: str) -> QPixmap | None:
@@ -42,7 +42,7 @@ class ShortcutsWidget(Renderer):
     defaults = {"items": [], "columns": 4}
 
     @property
-    def base_size(self):  # cresce conforme a quantidade de atalhos
+    def base_size(self):  # type: ignore[override]  # nos outros tipos é fixo; aqui cresce com os atalhos
         cols = max(2, min(8, int(self.opt.get("columns", 4))))
         n = max(1, len(self.opt.get("items", [])))
         rows = min(4, math.ceil(n / cols))

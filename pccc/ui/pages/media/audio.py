@@ -12,6 +12,7 @@ from ...components import GlassCard, ResponsiveGrid, label
 from ...icons import G
 from ..common import add_desktop_widget
 from .charts import LevelMeter, SpectrumView
+from ...qtutil import clear_layout
 
 
 # =============================================================== componentes
@@ -195,10 +196,7 @@ class AudioView(QWidget):
         if ids == self._dev_ids:
             return
         self._dev_ids = ids
-        while self.dev_box.count():
-            w = self.dev_box.takeAt(0).widget()
-            if w:
-                w.deleteLater()
+        clear_layout(self.dev_box)
         for d in devs:
             b = QPushButton(("✓  " if d.default else "     ") + d.name)
             b.setObjectName("Primary" if d.default else "")

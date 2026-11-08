@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import ctypes
+from collections.abc import Callable
 
 from PySide6.QtCore import QPoint, QPointF, QRectF, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QCursor, QGuiApplication, QPainter, QPen
@@ -53,7 +54,7 @@ class DesktopWidgetWindow(QWidget):
         super().__init__(None)
         self.renderer = renderer
         self.cfg = renderer.cfg
-        self._peers = peers or (lambda: [])
+        self._peers: Callable[[], list[DesktopWidgetWindow]] = peers or (lambda: [])
         self._style = Style(self.cfg)
         self._drag: QPoint | None = None
         self._resizing = False

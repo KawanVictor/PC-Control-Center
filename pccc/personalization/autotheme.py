@@ -24,7 +24,7 @@ log = get_logger("autotheme")
 HKCU = winreg.HKEY_CURRENT_USER
 
 
-def _parse(hhmm: str, default: str) -> dtime:
+def _parse(hhmm: str | None, default: str) -> dtime:
     try:
         h, m = (int(x) for x in (hhmm or default).split(":"))
         return dtime(h, m)
@@ -163,8 +163,8 @@ class AutoTheme(QObject):
         from datetime import timedelta
         cands = []
         for key, kind, default in (("light_at", "claro", "07:00"), ("dark_at", "escuro", "19:00")):
-            t = _parse(cfg.get(key), default)
-            dt = now.replace(hour=t.hour, minute=t.minute, second=0, microsecond=0)
+            hm = _parse(cfg.get(key), default)
+            dt = now.replace(hour=hm.hour, minute=hm.minute, second=0, microsecond=0)
             if dt <= now:
                 dt += timedelta(days=1)
             cands.append((dt, kind))

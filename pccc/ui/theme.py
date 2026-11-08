@@ -227,7 +227,7 @@ class ThemeManager(QObject):
     def apply(self) -> None:
         self.theme = self._read()
         app = QApplication.instance()
-        if app is not None:
+        if isinstance(app, QApplication):
             app.setStyleSheet(self.theme.stylesheet())
         self.changed.emit(self.theme)
 

@@ -10,9 +10,10 @@ from ....personalization import accent, tweaks
 from ...components import ResponsiveGrid, ToggleSwitch, label
 from ...icons import G
 from ...tasks import run_task
+from ._tab import PersonalizationTab
 
 
-class LookTab:
+class LookTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # ============================================================== APARÊNCIA

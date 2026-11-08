@@ -112,16 +112,18 @@ def _check_window() -> str:
     from PySide6.QtWidgets import QSystemTrayIcon
     from .ui.main_window import MainWindow
     from .ui.theme import ThemeManager
-    QSystemTrayIcon.show = lambda self: None          # sem ícone na bandeja durante o teste
+    QSystemTrayIcon.show = lambda self: None  # type: ignore[method-assign]  # sem ícone na bandeja no teste
     ThemeManager.instance().apply()
     win = MainWindow()
     win.resize(1280, 800)
     n = win.stack.count()
     for i in range(n):
         page = win.stack.widget(i)
+        assert page is not None, f"página {i} não existe"
         page.resize(1000, 760)
         assert not page.grab().isNull(), f"página {i} não desenhou"
-    win.tray.hide()
+    if win.tray is not None:
+        win.tray.hide()
     win.deleteLater()
     return f"{n} páginas montadas"
 
@@ -238,7 +240,8 @@ def main() -> int:
     app = QApplication(sys.argv)
     from .monitoring.collector import MonitorService
     from .network.monitor import NetworkService
-    snaps, nets = [], []
+    snaps: list = []
+    nets: list = []
     MonitorService.instance().snapshot.connect(snaps.append)
     NetworkService.instance().snapshot.connect(nets.append)
     MonitorService.instance().start()

@@ -222,9 +222,9 @@ def read_registry_apps() -> list[InstalledApp]:
     # O mesmo programa pode aparecer em mais de uma chave (ex.: 32 e 64 bits): deduplica.
     seen: dict[tuple, InstalledApp] = {}
     for a in apps:
-        k = (a.name.lower(), a.version)
-        if k not in seen or (not seen[k].uninstall_cmd and a.uninstall_cmd):
-            seen[k] = a
+        ident = (a.name.lower(), a.version)
+        if ident not in seen or (not seen[ident].uninstall_cmd and a.uninstall_cmd):
+            seen[ident] = a
     return list(seen.values())
 
 

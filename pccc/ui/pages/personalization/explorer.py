@@ -8,9 +8,10 @@ from ....personalization import tweaks
 from ...components import ResponsiveGrid, ToggleSwitch, label
 from ...icons import G
 from ...tasks import run_task
+from ._tab import PersonalizationTab
 
 
-class ExplorerTab:
+class ExplorerTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # ======================================================== BARRA DE TAREFAS
@@ -73,9 +74,11 @@ class ExplorerTab:
         return w
 
     def _go_startup(self) -> None:
+        from ...main_window import MainWindow   # aqui dentro: main_window importa esta página
+        from ..apps import AppsPage
         win = self.window()
-        if hasattr(win, "show_page"):
+        if isinstance(win, MainWindow):
             win.show_page(3)
-            page = win.stack.widget(3)
-            if hasattr(page, "switch"):
+            page = win._page(3)
+            if isinstance(page, AppsPage):
                 page.switch("startup")

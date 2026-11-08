@@ -24,6 +24,7 @@ from ..icons import G
 from ..tasks import run_task
 from .common import make_table
 from .base import Page
+from ..qtutil import clear_layout
 
 SEV_COLOR = {"critical": "#fb7185", "warning": "#fbbf24", "info": "#38bdf8", "tip": "#38bdf8", "ok": "#34d399"}
 SEV_TEXT = {"critical": "Crítico", "warning": "Atenção", "info": "Info", "tip": "Dica", "ok": "OK"}
@@ -76,6 +77,12 @@ class AlertsPage(Page):
             self._analyze()
         elif key == "reports" and not getattr(self, "_rep", None):
             self._generate()
+
+    def _navigate(self, action: str) -> None:
+        """Botão de uma sugestão: a janela principal abre a página ou ação indicada."""
+        navigate = getattr(self.window(), "navigate", None)
+        if navigate is not None:
+            navigate(action)
 
     def on_shown(self) -> None:
         self.switch(self.current)
@@ -241,10 +248,7 @@ class AlertsPage(Page):
         return w
 
     def _fill_rules(self) -> None:
-        while self.rules_box.count():
-            it = self.rules_box.takeAt(0)
-            if it.widget():
-                it.widget().deleteLater()
+        clear_layout(self.rules_box)
         for rule in load_rules().values():
             w = QWidget()
             h = QHBoxLayout(w)
@@ -378,10 +382,7 @@ class AlertsPage(Page):
             val = b.scores.get(res)
             bar.setValue(int((val or 0) * 10))
             v.setText("—" if val is None else f"{val:.0f}%")
-        while self.sugg_box.count():
-            it = self.sugg_box.takeAt(0)
-            if it.widget():
-                it.widget().deleteLater()
+        clear_layout(self.sugg_box)
         for sg in suggestions:
             w = QWidget()
             h = QHBoxLayout(w)
@@ -398,8 +399,8 @@ class AlertsPage(Page):
             h.addLayout(col, 1)
             if sg.action:
                 btn = QPushButton(sg.action_label or "Abrir")
-                btn.clicked.connect(lambda _=False, a=sg.action: self.window().navigate(a))
-                h.addWidget(btn, 0, Qt.AlignTop)
+                btn.clicked.connect(lambda _=False, a=sg.action: self._navigate(a))
+                h.addWidget(btn, 0, Qt.AlignmentFlag.AlignTop)
             self.sugg_box.addWidget(w)
         self.sugg_card.title_label.setText(f"SUGESTÕES DE OTIMIZAÇÃO ({len(suggestions)})")
         self.relayout()

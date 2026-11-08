@@ -34,7 +34,7 @@ TEMPLATES = [
 def locations() -> dict[str, Path]:
     appdata = Path(os.environ.get("APPDATA", ""))
     return {
-        "desktop": Path(os.path.expanduser("~")) / "Desktop" if not _onedrive_desktop() else _onedrive_desktop(),
+        "desktop": _onedrive_desktop() or Path(os.path.expanduser("~")) / "Desktop",
         "start": appdata / r"Microsoft\Windows\Start Menu\Programs",
     }
 

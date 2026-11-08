@@ -10,6 +10,7 @@ from ....personalization import hotkeys
 from ...components import GlassCard, ToggleSwitch, label
 from ...icons import G
 from ..common import setting_row
+from ...qtutil import clear_layout
 
 
 # ============================================================== ATALHOS
@@ -23,20 +24,17 @@ class HotkeysView(QWidget):
         en = ToggleSwitch()
         en.setChecked(bool(Settings.instance().get("hotkeys.enabled", True)))
         en.toggled.connect(lambda v: (Settings.instance().set("hotkeys.enabled", v),
-                                      hotkeys.HotkeyManager.instance().apply(), self.render()))
+                                      hotkeys.HotkeyManager.instance().apply(), self.refresh_view()))
         card.add(setting_row("Atalhos ligados", "Funcionam em qualquer programa, mesmo com o app na bandeja. Clique na "
                       "caixa e pressione a combinação (ex.: Ctrl+Alt+J).", en))
         self.form = QGridLayout()
         self.form.setColumnStretch(0, 1)
         card.add(self.form)
         lay.addWidget(card)
-        self.render()
+        self.refresh_view()
 
-    def render(self) -> None:
-        while self.form.count():
-            w = self.form.takeAt(0).widget()
-            if w:
-                w.deleteLater()
+    def refresh_view(self) -> None:
+        clear_layout(self.form)
         mgr = hotkeys.HotkeyManager.instance()
         b = hotkeys.bindings()
         for r, (action, text) in enumerate(hotkeys.actions().items()):
@@ -71,4 +69,4 @@ class HotkeysView(QWidget):
 
     def _clear(self, action: str) -> None:
         hotkeys.HotkeyManager.instance().set_binding(action, "")
-        self.render()
+        self.refresh_view()

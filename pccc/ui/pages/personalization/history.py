@@ -11,9 +11,10 @@ from ...components import label
 from ...icons import G
 from ...tasks import run_task
 from ..common import ask, make_table
+from ._tab import PersonalizationTab
 
 
-class HistoryTab:
+class HistoryTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # ================================================================ HISTÓRICO

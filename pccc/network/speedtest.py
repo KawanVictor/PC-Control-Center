@@ -68,7 +68,7 @@ def _latency(samples: int = 12) -> tuple[float, float]:
     for _ in range(samples):
         t0 = time.perf_counter()
         try:
-            s = socket.create_connection(addr[:2], timeout=3)
+            s = socket.create_connection((str(addr[0]), int(addr[1])), timeout=3)
         except OSError:
             continue
         times.append((time.perf_counter() - t0) * 1000)

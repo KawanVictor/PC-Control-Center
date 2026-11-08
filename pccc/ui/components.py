@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import math
-from typing import Callable, Iterable
+from typing import Callable, Iterable, TypeVar
 
 import pyqtgraph as pg
 from PySide6.QtCore import (QEasingCurve, QPointF, QRectF, QSize, Qt, QVariantAnimation, Signal)
@@ -14,6 +14,8 @@ from PySide6.QtWidgets import (QAbstractItemView, QButtonGroup, QCheckBox, QFram
 
 from ..core.config import Settings
 from .theme import Theme, ThemeManager, icon_font
+
+W = TypeVar("W", bound=QWidget)   # ResponsiveGrid.add devolve o widget com o tipo dele
 
 pg.setConfigOptions(antialias=True, background=None)
 
@@ -159,17 +161,17 @@ class RingGauge(QWidget):
             self._f_caption = QFont("Segoe UI")
             self._f_caption.setPixelSize(max(9, int(side * 0.085)))
             self._static.clear()
-        c = rect.center()
+        mid = rect.center()
         p.setPen(t.color("text"))
         p.setFont(self._f_value)
         st = self._static_text(self._text, self._f_value)
         sz = st.size()
-        p.drawStaticText(QPointF(c.x() - sz.width() / 2, c.y() - sz.height() / 2 - side * 0.04), st)
+        p.drawStaticText(QPointF(mid.x() - sz.width() / 2, mid.y() - sz.height() / 2 - side * 0.04), st)
         if self.caption:
             p.setPen(t.color("muted"))
             p.setFont(self._f_caption)
             st = self._static_text(self.caption, self._f_caption)
-            p.drawStaticText(QPointF(c.x() - st.size().width() / 2, c.y() + side * 0.11), st)
+            p.drawStaticText(QPointF(mid.x() - st.size().width() / 2, mid.y() + side * 0.11), st)
         p.end()
 
     def _static_text(self, text: str, font: QFont) -> QStaticText:
@@ -379,7 +381,7 @@ class ResponsiveGrid(QWidget):
         self.grid.setContentsMargins(0, 0, 0, 0)
         self.grid.setSpacing(spacing)
 
-    def add(self, w: QWidget, span: int = 1) -> QWidget:
+    def add(self, w: W, span: int = 1) -> W:
         self._items.append((w, span))
         self._relayout(force=True)
         return w

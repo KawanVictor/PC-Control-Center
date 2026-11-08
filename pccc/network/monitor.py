@@ -137,7 +137,7 @@ class NetworkWorker(QObject):
         self._ping.set_target("gateway", gw)
         ip = active.ipv4[0] if active and active.ipv4 else ""
         if self._last_ip and ip and ip != self._last_ip:
-            self._event("ip_change", f"{self._last_ip} → {ip} ({active.name})")
+            self._event("ip_change", f"{self._last_ip} → {ip} ({active.name if active else '?'})")
         if ip:
             self._last_ip = ip
 
@@ -243,14 +243,14 @@ class NetworkWorker(QObject):
         today = date.today().isoformat()
         rx_p = sum(v[0] for v in self._pending(io).values())
         tx_p = sum(v[1] for v in self._pending(io).values())
-        daily = [list(d) for d in self._usage.daily]
+        daily = list(self._usage.daily)
         if daily and daily[-1][0] == today:
-            daily[-1][1] += rx_p
-            daily[-1][2] += tx_p
+            day, rx0, tx0 = daily[-1]
+            daily[-1] = (day, rx0 + rx_p, tx0 + tx_p)
         else:
-            daily.append([today, rx_p, tx_p])
+            daily.append((today, rx_p, tx_p))
         week = (date.today() - timedelta(days=6)).isoformat()
-        u = UsageTotals(daily=[tuple(d) for d in daily])
+        u = UsageTotals(daily=daily)
         for d, rx, tx in daily:
             u.month_rx += rx
             u.month_tx += tx

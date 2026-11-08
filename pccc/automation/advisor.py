@@ -74,7 +74,7 @@ def bottleneck(sys_snap, hist_hour: dict, history_live=None) -> Bottleneck:
         return Bottleneck("Nenhum", 0, "Ainda sem dados suficientes.", {})
     # RAM "cheia" pesa mais cedo que CPU: acima de ~85% o Windows começa a paginar
     weighted = {k: v * (1.15 if k == "Memória RAM" else 1.0) for k, v in scores.items() if v is not None}
-    res = max(weighted, key=weighted.get)
+    res = max(weighted, key=lambda k: weighted[k])
     level = scores[res]
     limits = {"CPU": 75, "Memória RAM": 80, "GPU": 85, "Disco": 70}
     if level < limits.get(res, 80):

@@ -7,6 +7,7 @@ curto para os mini gráficos e busca clima/bateria/mídia apenas quando algum wi
 from __future__ import annotations
 
 import time
+from typing import Any
 from collections import deque
 
 import psutil
@@ -34,10 +35,10 @@ class DataHub(QObject):
         self.net: NetworkSnapshot | None = NetworkService.instance().latest
         self.hist: dict[str, deque] = {k: deque(maxlen=HIST) for k in
                                        ("cpu", "ram", "gpu", "down", "up", "cpu_temp", "gpu_temp")}
-        self.battery = None
+        self.battery: Any = None             # psutil.sensors_battery() ou None
         self._weather: dict[tuple, dict] = {}
         self._weather_pending: set[tuple] = set()
-        self._weather_error: dict[tuple, str] = {}
+        self._weather_error: dict[tuple, tuple[str, float]] = {}   # (mensagem, quando)
         MonitorService.instance().snapshot.connect(self._on_sys)
         NetworkService.instance().snapshot.connect(self._on_net)
         self._bat_timer = QTimer(self)

@@ -186,7 +186,7 @@ def set_spi(action: int, value: bool, record_change: bool = True) -> int | None:
     return None
 
 
-def set_animations(on: bool) -> int:
+def set_animations(on: bool) -> int | None:
     return set_spi(SPI_SETCLIENTAREAANIMATION, on)
 
 

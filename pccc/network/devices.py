@@ -26,7 +26,7 @@ import struct
 import time
 import urllib.parse
 import urllib.request
-from concurrent.futures import ThreadPoolExecutor, wait
+from concurrent.futures import Future, ThreadPoolExecutor, wait
 from ctypes import wintypes
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -390,7 +390,8 @@ def scan(progress=None) -> tuple[LocalNet, list[LanDevice]]:
         ips = list(found)
         fdns = {ip: pool.submit(reverse_dns, ip) for ip in ips}
         fnb = {ip: pool.submit(netbios_name, ip) for ip in ips}
-        wait(list(fdns.values()) + list(fnb.values()) + [ssdp_future], timeout=6)
+        pending: list[Future] = [*fdns.values(), *fnb.values(), ssdp_future]
+        wait(pending, timeout=6)
 
         def got(fut, default):
             return fut.result() if fut.done() and not fut.exception() else default

@@ -13,7 +13,7 @@ from PySide6.QtCore import QObject, QTimer, Signal
 
 from ..core.config import Settings
 from ..core.logger import get_logger
-from ..monitoring.models import Snapshot
+from ..monitoring.models import ProcessEntry, Snapshot
 from ..network.models import NetworkSnapshot
 from ..ui.fmt import fmt_bytes
 from . import store
@@ -40,7 +40,7 @@ class AlertEngine(QObject):
         self._last_fire: dict[str, float] = {}
         self._net_down_since: float | None = None
         self._net_alerted = False
-        self._last_procs = None
+        self._last_procs: list[ProcessEntry] | None = None
         Settings.instance().changed.connect(self._on_setting)
         store.prune()
 
@@ -66,7 +66,7 @@ class AlertEngine(QObject):
             self.rules = load_rules()
 
     # ------------------------------------------------------------------ núcleo
-    def _check(self, key: str, rule: Rule, active: bool, make: Callable[[], Alert]) -> None:
+    def _check(self, key: str, rule: Rule, active: bool, make: Callable[..., Alert]) -> None:
         now = self.clock()
         if not rule.enabled or not active:
             self._since.pop(key, None)

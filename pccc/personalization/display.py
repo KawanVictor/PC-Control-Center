@@ -47,7 +47,11 @@ def _physical_monitors():
     mons = []
     cb_type = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HMONITOR, wintypes.HDC, ctypes.POINTER(wintypes.RECT),
                                  wintypes.LPARAM)
-    cb = cb_type(lambda h, _dc, _r, _l: mons.append(h) or True)
+    def found(h, _dc, _r, _l):
+        mons.append(h)
+        return True
+
+    cb = cb_type(found)
     user32.EnumDisplayMonitors(None, None, cb, 0)
     out = []
     for hm in mons:
@@ -152,7 +156,7 @@ class WarmFilter:
 
     def __init__(self) -> None:
         self.level = 0
-        self._mag = None
+        self._mag: ctypes.WinDLL | None = None
 
     @classmethod
     def instance(cls) -> "WarmFilter":

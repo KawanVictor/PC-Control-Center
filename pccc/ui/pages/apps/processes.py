@@ -45,16 +45,16 @@ class ProcessesView(QWidget):
         bar = QHBoxLayout()
         self.kind = Segmented([("Aplicativo", "Aplicativos"), ("Segundo plano", "Segundo plano"),
                                ("Windows", "Windows"), ("", "Todos")], "")
-        self.kind.changed.connect(lambda _k: self.render())
+        self.kind.changed.connect(lambda _k: self.refresh_view())
         bar.addWidget(self.kind)
         self.search = QLineEdit()
         self.search.setPlaceholderText("Filtrar por nome, PID ou caminho...")
         self.search.setClearButtonEnabled(True)
-        self.search.textChanged.connect(lambda _t: self.render())
+        self.search.textChanged.connect(lambda _t: self.refresh_view())
         bar.addWidget(self.search, 1)
         self.group = QCheckBox("Agrupar por aplicativo")
         self.group.setChecked(True)
-        self.group.toggled.connect(lambda _v: self.render())
+        self.group.toggled.connect(lambda _v: self.refresh_view())
         bar.addWidget(self.group)
         self.pause = QCheckBox("Pausar atualização")
         self.pause.toggled.connect(lambda v: setattr(self, "_paused", v))
@@ -102,12 +102,12 @@ class ProcessesView(QWidget):
         self.sm["win"].setText(str(k["Windows"]))
         self.sm["total"].setText(f"{snap.processes.total} / {snap.processes.threads:,}".replace(",", "."))
         if not self._paused:
-            self.render()
+            self.refresh_view()
 
     def _key(self, rows: list[ProcessEntry]) -> str:
         return rows[0].name.lower() if len(rows) > 1 or self.group.isChecked() else f"{rows[0].pid}"
 
-    def render(self) -> None:
+    def refresh_view(self) -> None:
         kind = self.kind.current()
         q = self.search.text().strip().lower()
         sel = self.selected()
@@ -161,7 +161,8 @@ class ProcessesView(QWidget):
         # restaura a seleção
         if sel_key is not None:
             for r in range(t.rowCount()):
-                idx = t.item(r, 0).data(Qt.UserRole + 1)
+                cell = t.item(r, 0)
+                idx = cell.data(Qt.ItemDataRole.UserRole + 1) if cell is not None else None
                 if idx is not None and idx < len(rows) and self._key(rows[idx]) == sel_key:
                     t.selectRow(r)
                     break

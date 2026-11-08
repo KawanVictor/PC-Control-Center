@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Callable
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -29,7 +30,7 @@ class SceneEditor(QDialog):
         self.setWindowTitle(f"Cenário — {scene.get('name', '')}")
         self.resize(640, 720)
         self.scene = dict(scene)
-        self.actions = dict(scene.get("actions") or {})
+        self.values = dict(scene.get("actions") or {})
         outer = QVBoxLayout(self)
         top = QFormLayout()
         self.name = QLineEdit(scene.get("name", ""))
@@ -51,7 +52,7 @@ class SceneEditor(QDialog):
         self.form.setColumnStretch(1, 1)
         scroll.setWidget(body)
         outer.addWidget(scroll, 1)
-        self.rows: dict[str, tuple[QCheckBox, callable]] = {}
+        self.rows: dict[str, tuple[QCheckBox, Callable]] = {}
         self._build()
         bb = QDialogButtonBox(QDialogButtonBox.StandardButton.Save | QDialogButtonBox.StandardButton.Cancel)
         bb.button(QDialogButtonBox.StandardButton.Save).setText("Salvar")
@@ -73,11 +74,11 @@ class SceneEditor(QDialog):
     def _add(self, key: str, widget: QWidget, getter, setter=None) -> None:
         r = self.form.rowCount()
         cb = QCheckBox(scenes.ACTION_LABELS[key])
-        cb.setChecked(key in self.actions and self.actions[key] not in (None, ""))
+        cb.setChecked(key in self.values and self.values[key] not in (None, ""))
         widget.setEnabled(cb.isChecked())
         cb.toggled.connect(widget.setEnabled)
-        if setter is not None and key in self.actions:
-            setter(self.actions[key])
+        if setter is not None and key in self.values:
+            setter(self.values[key])
         self.form.addWidget(cb, r, 0)
         self.form.addWidget(widget, r, 1)
         self.rows[key] = (cb, getter)
@@ -92,13 +93,13 @@ class SceneEditor(QDialog):
         return c
 
     def _build(self) -> None:
-        pw = self._combo([(k, v[1]) for k, v in power.OVERLAYS.items()], self.actions.get("power"))
+        pw = self._combo([(k, v[1]) for k, v in power.OVERLAYS.items()], self.values.get("power"))
         self._add("power", pw, pw.currentData)
-        wm = self._combo([("dark", "Escuro"), ("light", "Claro")], self.actions.get("windows_mode"))
+        wm = self._combo([("dark", "Escuro"), ("light", "Claro")], self.values.get("windows_mode"))
         self._add("windows_mode", wm, wm.currentData)
 
-        acc_btn = QPushButton(self.actions.get("accent") or "#0078D4")
-        acc_btn.setProperty("val", self.actions.get("accent") or "#0078D4")
+        acc_btn = QPushButton(self.values.get("accent") or "#0078D4")
+        acc_btn.setProperty("val", self.values.get("accent") or "#0078D4")
 
         def pick_acc():
             c = QColorDialog.getColor(QColor(acc_btn.property("val")), self, "Cor de destaque")
@@ -108,8 +109,8 @@ class SceneEditor(QDialog):
         acc_btn.clicked.connect(pick_acc)
         self._add("accent", acc_btn, lambda: acc_btn.property("val"))
 
-        wp = QPushButton(os.path.basename(self.actions.get("wallpaper", "")) or "Escolher imagem...")
-        wp.setProperty("val", self.actions.get("wallpaper", ""))
+        wp = QPushButton(os.path.basename(self.values.get("wallpaper", "")) or "Escolher imagem...")
+        wp.setProperty("val", self.values.get("wallpaper", ""))
 
         def pick_wp():
             f, _ = QFileDialog.getOpenFileName(self, "Imagem", "", "Imagens (*.jpg *.jpeg *.png *.bmp *.webp)")
@@ -120,13 +121,13 @@ class SceneEditor(QDialog):
         self._add("wallpaper", wp, lambda: wp.property("val"))
 
         lw = self._combo([("on", "Ligar (usa o vídeo escolhido em Papel de parede vivo)"), ("off", "Desligar")],
-                         self.actions.get("livewall"))
+                         self.values.get("livewall"))
         self._add("livewall", lw, lw.currentData)
 
         from ....widgets.manager import WidgetManager
-        prof = self._combo([(n, n) for n in WidgetManager.instance().profile_names()], self.actions.get("widgets_profile"))
+        prof = self._combo([(n, n) for n in WidgetManager.instance().profile_names()], self.values.get("widgets_profile"))
         self._add("widgets_profile", prof, prof.currentData)
-        wv = self._combo([(True, "Mostrar"), (False, "Ocultar")], self.actions.get("widgets_visible"))
+        wv = self._combo([(True, "Mostrar"), (False, "Ocultar")], self.values.get("widgets_visible"))
         self._add("widgets_visible", wv, wv.currentData)
 
         try:
@@ -134,28 +135,28 @@ class SceneEditor(QDialog):
             devs = [(d.id, d.name) for d in audio.output_devices()]
         except Exception:
             devs = []
-        ad = self._combo(devs or [("", "Nenhum dispositivo")], self.actions.get("audio_device"))
+        ad = self._combo(devs or [("", "Nenhum dispositivo")], self.values.get("audio_device"))
         self._add("audio_device", ad, ad.currentData)
         for key, default in (("volume", 50), ("brightness", 70), ("warm", 50)):
             sp = QSpinBox()
             sp.setRange(0, 100)
             sp.setSuffix(" %")
-            sp.setValue(int(self.actions.get(key, default) or default))
+            sp.setValue(int(self.values.get(key, default) or default))
             self._add(key, sp, sp.value)
-        mu = self._combo([(True, "Mudo"), (False, "Com som")], self.actions.get("mute"))
+        mu = self._combo([(True, "Mudo"), (False, "Com som")], self.values.get("mute"))
         self._add("mute", mu, mu.currentData)
         sa = self._combo([(True, "Sim (alertas viram só registro; críticos continuam)"), (False, "Não")],
-                         self.actions.get("silence_alerts"))
+                         self.values.get("silence_alerts"))
         self._add("silence_alerts", sa, sa.currentData)
         from ....media.obs import ObsClient
         obs = QComboBox()
         obs.setEditable(True)
         obs.addItems(ObsClient.instance().status.scenes)
-        obs.setCurrentText(self.actions.get("obs_scene", "") or "")
+        obs.setCurrentText(self.values.get("obs_scene", "") or "")
         self._add("obs_scene", obs, obs.currentText)
-        fp = self._combo([(True, "Ligar (pede o UAC)"), (False, "Desligar")], self.actions.get("fps_counter"))
+        fp = self._combo([(True, "Ligar (pede o UAC)"), (False, "Desligar")], self.values.get("fps_counter"))
         self._add("fps_counter", fp, fp.currentData)
-        la = QPlainTextEdit("\n".join(self.actions.get("launch", []) or []))
+        la = QPlainTextEdit("\n".join(self.values.get("launch", []) or []))
         la.setPlaceholderText("Um por linha: caminho de programa ou site (https://...)")
         la.setFixedHeight(80)
         self._add("launch", la, lambda: [x.strip() for x in la.toPlainText().splitlines() if x.strip()])
@@ -204,9 +205,9 @@ class ScenesView(QWidget):
         b.addWidget(reset)
         b.addStretch(1)
         lay.addLayout(b)
-        self.render()
+        self.refresh_view()
 
-    def render(self) -> None:
+    def refresh_view(self) -> None:
         act = scenes.active()
         self.banner.setVisible(bool(act))
         if act:
@@ -248,21 +249,21 @@ class ScenesView(QWidget):
         if errors:
             QMessageBox.warning(self, "Cenário", "O cenário foi ativado, mas alguns itens não puderam ser "
                                                  "aplicados:\n\n" + "\n".join(errors))
-        self.render()
+        self.refresh_view()
 
     def _deactivate(self) -> None:
         errors = scenes.deactivate()
         if errors:
             QMessageBox.warning(self, "Voltar ao normal", "Alguns itens não puderam ser restaurados:\n\n"
                                 + "\n".join(errors))
-        self.render()
+        self.refresh_view()
 
     def _edit(self, sc: dict) -> None:
         dlg = SceneEditor(sc, self)
         if dlg.exec():
             scenes.upsert(dlg.scene)
             hotkeys.HotkeyManager.instance().apply()
-            self.render()
+            self.refresh_view()
 
     def _new(self) -> None:
         self._edit(scenes.new_scene("Novo cenário"))
@@ -273,7 +274,7 @@ class ScenesView(QWidget):
             if scenes.active().get("id") == sc["id"]:
                 scenes.deactivate()
             scenes.remove(sc["id"])
-            self.render()
+            self.refresh_view()
 
     def _reset(self) -> None:
         if ask(self, "Cenários padrão", "Restaurar os 4 cenários padrão?",
@@ -281,4 +282,4 @@ class ScenesView(QWidget):
             if scenes.active():
                 scenes.deactivate()
             Settings.instance().set("scenes.list", [])
-            self.render()
+            self.refresh_view()

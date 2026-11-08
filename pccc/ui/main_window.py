@@ -6,7 +6,7 @@ import os
 from PySide6.QtCore import (QEasingCurve, QPointF, QPropertyAnimation, QRectF, QSize, Qt, QTimer,
                             QParallelAnimationGroup)
 from PySide6.QtGui import QAction, QColor, QLinearGradient, QPainter, QPixmap, QRadialGradient
-from PySide6.QtWidgets import (QApplication, QButtonGroup, QFrame, QGraphicsOpacityEffect, QHBoxLayout,
+from PySide6.QtWidgets import (QButtonGroup, QFrame, QGraphicsOpacityEffect, QHBoxLayout,
                                QLabel, QMainWindow, QMenu, QPushButton, QStackedWidget, QSystemTrayIcon,
                                QVBoxLayout, QWidget)
 
@@ -19,6 +19,8 @@ from ..monitoring.models import Snapshot
 from .components import icon_label, label
 from .fmt import fmt_pct, fmt_temp
 from .history import History
+from .pages.base import Page
+from .qtutil import qapp
 from .icons import G, make_app_icon
 from ..network.monitor import NetworkService
 from ..automation.engine import AlertEngine
@@ -354,7 +356,7 @@ class MainWindow(QMainWindow):
             return
         self.restore()
         self.show_page(index)
-        page = self.stack.widget(index)
+        page = self._page(index)
         if sub:
             if hasattr(page, "switch"):
                 page.switch(sub)
@@ -378,7 +380,7 @@ class MainWindow(QMainWindow):
         # Páginas com on_net_snapshot recebem sempre (mantêm seus próprios buffers);
         # cada uma decide se redesenha conforme estiver visível.
         for i in range(self.stack.count()):
-            page = self.stack.widget(i)
+            page = self._page(i)
             if hasattr(page, "on_net_snapshot"):
                 try:
                     page.on_net_snapshot(snap)
@@ -425,8 +427,8 @@ class MainWindow(QMainWindow):
                 self.settings.set("livewall.enabled", lw.running)
             elif action == "fps":
                 from ..media.fps import FpsMonitor
-                m = FpsMonitor.instance()
-                m.stop() if m.running() else m.start()
+                fps = FpsMonitor.instance()
+                fps.stop() if fps.running() else fps.start()
             elif action == "obs_record":
                 from ..media.obs import ObsClient
                 ObsClient.instance().toggle_record()
@@ -437,7 +439,7 @@ class MainWindow(QMainWindow):
         except Exception as e:     # noqa: BLE001 — atalho nunca derruba o app
             log.warning("Atalho %s falhou: %s", action, e)
             self._toast("Atalho", str(e))
-        page = self.stack.widget(10)
+        page = self._page(10)
         if self.stack.currentIndex() == 10 and hasattr(page, "on_shown"):
             page.on_shown()
 
@@ -468,15 +470,20 @@ class MainWindow(QMainWindow):
         WidgetManager.instance().shutdown()
         AlertEngine.instance().shutdown()   # grava o uso por app acumulado
         for i in range(self.stack.count()):
-            page = self.stack.widget(i)
+            page = self._page(i)
             if hasattr(page, "shutdown"):
                 page.shutdown()
 
     # ------------------------------------------------------------- navegação
+    def _page(self, index: int) -> Page:
+        page = self.stack.widget(index)
+        assert isinstance(page, Page), f"página {index} não existe"
+        return page
+
     def show_page(self, index: int) -> None:
         if index == self.stack.currentIndex():
             return
-        page = self.stack.widget(index)
+        page = self._page(index)
         self.stack.setCurrentIndex(index)
         self.sidebar.buttons[index].setChecked(True)
         snap = MonitorService.instance().latest
@@ -492,7 +499,7 @@ class MainWindow(QMainWindow):
             anim.setEndValue(1.0)
             anim.setEasingCurve(QEasingCurve.Type.OutCubic)
             # Remove o efeito no fim: efeitos gráficos deixam a pintura mais lenta.
-            anim.finished.connect(lambda: page.setGraphicsEffect(None))
+            anim.finished.connect(lambda: page.setGraphicsEffect(None))  # type: ignore[arg-type]  # None tira o efeito
             anim.start()
 
     # ---------------------------------------------------------------- dados
@@ -513,7 +520,7 @@ class MainWindow(QMainWindow):
                  f"{f' · GPU {fmt_pct(gpu.percent)}' if gpu else ''}\nTemp. CPU {fmt_temp(snap.temps.cpu)}"
                  f"{net_line}")[:127])
         if self.isVisible() and not self.isMinimized():
-            page = self.stack.currentWidget()
+            page = self._page(self.stack.currentIndex())
             try:
                 page.on_snapshot(snap)
             except Exception:
@@ -574,7 +581,7 @@ class MainWindow(QMainWindow):
         self.activateWindow()
         snap = MonitorService.instance().latest
         if snap is not None:
-            self.stack.currentWidget().on_snapshot(snap)
+            self._page(self.stack.currentIndex()).on_snapshot(snap)
 
     def changeEvent(self, e) -> None:
         super().changeEvent(e)
@@ -583,7 +590,7 @@ class MainWindow(QMainWindow):
             QTimer.singleShot(0, self.hide)
 
     def closeEvent(self, e) -> None:
-        app = QApplication.instance()
+        app = qapp()
         if (self.tray is not None and self.settings.get("general.close_to_tray", True)
                 and not app.property("force_quit")):
             e.ignore()
@@ -608,7 +615,7 @@ class MainWindow(QMainWindow):
     def quit_app(self) -> None:
         self._save_geometry()
         self.shutdown_pages()
-        app = QApplication.instance()
+        app = qapp()
         app.setProperty("force_quit", True)
         if self.tray is not None:
             self.tray.hide()

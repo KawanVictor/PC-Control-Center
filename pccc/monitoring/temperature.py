@@ -11,6 +11,7 @@ O Windows não expõe temperatura de CPU de forma padronizada. Ordem de tentativ
 from __future__ import annotations
 
 import time
+from typing import Any
 
 from ..core.logger import get_logger
 from ..core.winapi import is_admin
@@ -27,7 +28,7 @@ class TemperatureMonitor:
     def __init__(self) -> None:
         import wmi  # importado aqui: precisa de CoInitialize já feito na thread
         self._wmi = wmi
-        self._hw_ns = None
+        self._hw_ns: Any = None             # conexão WMI (sem tipos)
         self._hw_source = ""
         self._storage = None
         self._last_hw_probe = 0.0

@@ -33,12 +33,11 @@ class ScenesPage(Page):
         self.tabs.set_current(key)
         for k, v in self.views.items():
             v.setVisible(k == key)
-        if key == "scenes":
-            self.views["scenes"].render()
-        elif key == "auto":
-            self.views["auto"].refresh()
-        elif key == "keys":
-            self.views["keys"].render()
+        view = self.views[key]
+        if isinstance(view, (ScenesView, HotkeysView)):
+            view.refresh_view()
+        elif isinstance(view, AutoThemeView):
+            view.refresh()
         self.relayout()
 
     def on_shown(self) -> None:

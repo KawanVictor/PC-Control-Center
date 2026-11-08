@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QHBoxLayout, QMessageBox, QPushButton,
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QHBoxLayout, QMessageBox, QPushButton,
                                QSlider, QVBoxLayout, QWidget)
 
 from ... import __version__
@@ -20,6 +20,7 @@ from ..components import DataTable, GlassCard, ResponsiveGrid, Segmented, Toggle
 from ..icons import G
 from ..theme import ACCENT_LABELS, ACCENTS
 from .base import Page
+from ..qtutil import qapp
 
 
 def _row(title: str, desc: str, control: QWidget) -> QWidget:
@@ -125,7 +126,9 @@ class SettingsPage(Page):
             self.ping_host.addItem(host)
             self.ping_host.setItemData(self.ping_host.count() - 1, desc, Qt.ItemDataRole.ToolTipRole)
         self.ping_host.setCurrentText(self.s.get("network.ping_host", "1.1.1.1"))
-        self.ping_host.lineEdit().editingFinished.connect(self._set_ping_host)
+        edit = self.ping_host.lineEdit()
+        if edit is not None:
+            edit.editingFinished.connect(self._set_ping_host)
         self.ping_host.activated.connect(lambda _i: self._set_ping_host())
         net.add(_row("Servidor de referência", "IP ou domínio usado para medir a internet", self.ping_host))
         grid.add(net)
@@ -201,8 +204,8 @@ class SettingsPage(Page):
         res = QMessageBox.question(self, "Administrador",
                                    "O app será reaberto com permissão de administrador (o Windows pedirá "
                                    "confirmação). Continuar?")
-        if res == QMessageBox.Yes and relaunch_as_admin():
-            app = QApplication.instance()
+        if res == QMessageBox.StandardButton.Yes and relaunch_as_admin():
+            app = qapp()
             app.setProperty("force_quit", True)
             app.quit()
 

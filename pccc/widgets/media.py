@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import threading
 import time
+from typing import Any
 from dataclasses import dataclass
 
 from ..core.logger import get_logger
@@ -60,7 +61,8 @@ class MediaService:
         self._loop: asyncio.AbstractEventLoop | None = None
         self._thread: threading.Thread | None = None
         self._stop = threading.Event()
-        self._last_title = None
+        self._last_title: str | None = None
+        self._mgr: Any = None             # gerenciador de sessões WinRT
 
     @classmethod
     def instance(cls) -> "MediaService":
@@ -136,6 +138,8 @@ class MediaService:
             self._last_title = None
             return
         props = await s.try_get_media_properties_async()
+        if props is None:
+            return
         pb = s.get_playback_info()
         tl = s.get_timeline_properties()
         title = props.title or ""

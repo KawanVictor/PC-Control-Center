@@ -193,10 +193,10 @@ class ProcessMonitor:
 
         apps: dict[str, ProcessEntry] = {}
         for e in entries:
-            key = e.name.lower()
-            a = apps.get(key)
+            app_key = e.name.lower()
+            a = apps.get(app_key)
             if a is None:
-                apps[key] = ProcessEntry(pid=e.pid, name=e.name, cpu=e.cpu, memory=e.memory,
+                apps[app_key] = ProcessEntry(pid=e.pid, name=e.name, cpu=e.cpu, memory=e.memory,
                                          threads=e.threads, count=1)
             else:
                 a.cpu += e.cpu

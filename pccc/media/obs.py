@@ -14,6 +14,7 @@ import hashlib
 import json
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 import psutil
@@ -73,7 +74,7 @@ class ObsClient(QObject):
         self.ws.textMessageReceived.connect(self._on_message)
         self.ws.errorOccurred.connect(self._on_error)
         self.status = ObsStatus()
-        self._pending: dict[str, object] = {}
+        self._pending: dict[str, Callable[[dict, bool, str], None]] = {}
         self._password = ""
         self._last_bytes: tuple[float, int] | None = None
         self._manual_disconnect = False
@@ -142,7 +143,7 @@ class ObsClient(QObject):
             return
         op, d = msg.get("op"), msg.get("d") or {}
         if op == 0:                                   # Hello
-            ident = {"rpcVersion": 1, "eventSubscriptions": EVENTS}
+            ident: dict[str, object] = {"rpcVersion": 1, "eventSubscriptions": EVENTS}
             auth = d.get("authentication")
             if auth:
                 if not self._password:

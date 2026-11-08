@@ -125,13 +125,13 @@ class DevicesView(QWidget):
         self.w.updated.connect(self.render)
         self.w.progress.connect(self.status.setText)
         self._rows: list[lan.LanDevice] = []
-        self.render()
+        self.refresh_view()
 
     # ----------------------------------------------------------------- ações
     def on_shown(self) -> None:
         if not self.w.devices and not self.w.busy and not self.w.error:
             self.w.scan()
-        self.render()
+        self.refresh_view()
 
     def _toggle_watch(self, on: bool) -> None:
         Settings.instance().set("network.devices_watch", on)
@@ -166,7 +166,7 @@ class DevicesView(QWidget):
             d.custom_name = name.strip()
             if name.strip():
                 d.known = True
-            self.render()
+            self.refresh_view()
 
     def _menu(self, pos) -> None:
         row = self.table.rowAt(pos.y())
@@ -191,7 +191,7 @@ class DevicesView(QWidget):
     def _set_known(self, d: lan.LanDevice, known: bool) -> None:
         lan.set_custom(self.w.net_id, d.mac, known=known)
         d.known = known
-        self.render()
+        self.refresh_view()
 
     def _forget(self, d: lan.LanDevice) -> None:
         if ask(self, "Esquecer aparelho", f"Remover “{d.label}” do histórico desta rede?",
@@ -199,10 +199,10 @@ class DevicesView(QWidget):
                 "Esquecer"):
             lan.forget(self.w.net_id, d.mac)
             self.w.devices = [x for x in self.w.devices if x.mac != d.mac]
-            self.render()
+            self.refresh_view()
 
     # --------------------------------------------------------------- desenho
-    def render(self) -> None:
+    def refresh_view(self) -> None:
         w = self.w
         self.scan_btn.setEnabled(not w.busy)
         self.scan_btn.setText("Procurando..." if w.busy else "Procurar aparelhos")
@@ -254,8 +254,8 @@ class DevicesView(QWidget):
                 cells[7].setForeground(QColor("#fbbf24"))
             if d.model and name != d.model:
                 cells[1].setToolTip(d.model)
-            for c, it in enumerate(cells):
-                t.setItem(r, c, it)
+            for col, it in enumerate(cells):
+                t.setItem(r, col, it)
         t.setSortingEnabled(True)
         if not devs and not w.busy:
             self.status.setText(self.status.text() or "Nenhum aparelho encontrado ainda.")

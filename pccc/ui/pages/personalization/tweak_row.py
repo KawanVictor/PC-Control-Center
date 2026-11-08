@@ -34,22 +34,25 @@ class TweakRow(QWidget):
         if desc:
             col.addWidget(label(desc, "Faint", wrap=True))
         h.addLayout(col, 1)
+        self.ctrl: ToggleSwitch | QComboBox
         if tweak.toggle:
-            self.ctrl = ToggleSwitch()
-            self.ctrl.setChecked(tweak.current_index() == 1)
-            self.ctrl.toggled.connect(lambda on: self._apply(tweak.options[1 if on else 0][0]))
+            switch = ToggleSwitch()
+            switch.setChecked(tweak.current_index() == 1)
+            switch.toggled.connect(lambda on: self._apply(tweak.options[1 if on else 0][0]))
+            self.ctrl = switch
         else:
-            self.ctrl = QComboBox()
+            combo = QComboBox()
             for v, text in tweak.options:
-                self.ctrl.addItem(text, v)
-            self.ctrl.setCurrentIndex(max(0, tweak.current_index()))
-            self.ctrl.activated.connect(lambda _i: self._apply(self.ctrl.currentData()))
+                combo.addItem(text, v)
+            combo.setCurrentIndex(max(0, tweak.current_index()))
+            combo.activated.connect(lambda _i: self._apply(combo.currentData()))
+            self.ctrl = combo
         self.ctrl.setEnabled(tweak.supported)
         h.addWidget(self.ctrl, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
     def reload(self) -> None:
         self.ctrl.blockSignals(True)
-        if self.t.toggle:
+        if isinstance(self.ctrl, ToggleSwitch):
             self.ctrl.setChecked(self.t.current_index() == 1)
         else:
             self.ctrl.setCurrentIndex(max(0, self.t.current_index()))

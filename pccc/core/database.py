@@ -57,6 +57,13 @@ CREATE TABLE IF NOT EXISTS speedtests (
 
 class Database:
     _instance: "Database | None" = None
+    _conn: sqlite3.Connection
+    recovered_from: str | None
+    # Módulos que criam tabelas próprias marcam aqui que já criaram (uma vez por execução)
+    _regbackup_ready = False
+    _automation_ready = False
+    _lan_ready = False
+    _perslog_ready = False
 
     def __init__(self, path=None) -> None:
         self._lock = threading.Lock()

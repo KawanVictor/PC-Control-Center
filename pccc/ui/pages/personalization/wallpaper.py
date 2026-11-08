@@ -13,6 +13,7 @@ from ....personalization import wallpaper
 from ...components import ResponsiveGrid, label
 from ...icons import G
 from ...tasks import run_task
+from ._tab import PersonalizationTab
 
 
 def _thumbs(paths: list[str], w: int = 240, h: int = 135) -> list[tuple[str, QImage]]:
@@ -26,7 +27,7 @@ def _thumbs(paths: list[str], w: int = 240, h: int = 135) -> list[tuple[str, QIm
     return out
 
 
-class WallpaperTab:
+class WallpaperTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # ========================================================== PAPEL DE PAREDE

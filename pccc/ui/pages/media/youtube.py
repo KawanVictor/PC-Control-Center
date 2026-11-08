@@ -15,6 +15,7 @@ from ...icons import G
 from ...tasks import run_task
 from ..base import Page
 from ..common import add_desktop_widget
+from ...qtutil import clear_layout
 
 
 # =================================================================== YOUTUBE
@@ -141,10 +142,7 @@ class YouTubeView(QWidget):
         self._render()
 
     def _render(self) -> None:
-        while self.chips.count():
-            w = self.chips.takeAt(0).widget()
-            if w:
-                w.deleteLater()
+        clear_layout(self.chips)
         for c in self.feed.channels():
             b = QPushButton(f"{c.get('name', c['id'])}  ✕")
             b.setToolTip("Remover canal")

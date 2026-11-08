@@ -5,7 +5,7 @@ import time
 
 import pyqtgraph as pg
 from PySide6.QtCore import QSize, Qt, QTimer
-from PySide6.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QProgressBar, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QProgressBar, QVBoxLayout, QWidget
 
 from ...core.database import Database
 from ...monitoring.models import Snapshot
@@ -53,7 +53,7 @@ class CpuView(QWidget):
 
         cores = GlassCard("Processadores lógicos", G.PERFORMANCE)
         self.core_grid = ResponsiveGrid(min_col_width=150, max_cols=6, spacing=8)
-        self.core_charts: list[tuple[LiveChart, object]] = []
+        self.core_charts: list[tuple[LiveChart, QLabel]] = []
         cores.add(self.core_grid)
         lay.addWidget(cores)
 
@@ -435,8 +435,9 @@ class PerformancePage(Page):
         self.tabs.set_current(key)
         for k, v in self.views.items():
             v.setVisible(k == key)
-        if key == "hist":
-            self.views["hist"].reload()
+        hist = self.views["hist"]
+        if key == "hist" and isinstance(hist, HistoryView):
+            hist.reload()
         elif self.isVisible():
             from ...monitoring.collector import MonitorService
             snap = MonitorService.instance().latest
@@ -444,8 +445,9 @@ class PerformancePage(Page):
                 self.on_snapshot(snap)
 
     def on_shown(self) -> None:
-        if self.tabs.current() == "hist":
-            self.views["hist"].reload()
+        hist = self.views["hist"]
+        if self.tabs.current() == "hist" and isinstance(hist, HistoryView):
+            hist.reload()
 
     def on_snapshot(self, snap: Snapshot) -> None:
         view = self.views[self.current]

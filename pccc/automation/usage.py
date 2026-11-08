@@ -9,7 +9,7 @@ import time
 from collections import defaultdict
 from datetime import date
 
-from ..monitoring.models import Snapshot
+from ..monitoring.models import ProcessEntry, Snapshot
 from . import store
 
 FLUSH_SECONDS = 300
@@ -19,7 +19,7 @@ IGNORE = {"system", "registry", "memory compression", "secure system", "idle"}
 class UsageTracker:
     def __init__(self) -> None:
         self._acc: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0, 0.0])
-        self._last_list = None
+        self._last_list: list[ProcessEntry] | None = None
         self._last_t: float | None = None
         self._last_flush = time.time()
 
@@ -44,6 +44,6 @@ class UsageTracker:
 
     def flush(self, now: float | None = None) -> None:
         if self._acc:
-            store.add_app_usage(date.today().isoformat(), {k: tuple(v) for k, v in self._acc.items()})
+            store.add_app_usage(date.today().isoformat(), {k: (v[0], v[1], v[2]) for k, v in self._acc.items()})
             self._acc.clear()
         self._last_flush = now or time.time()

@@ -165,7 +165,8 @@ class WidgetManager(QObject):
         cls = REGISTRY[type_id]
         cfg = WidgetConfig(type=type_id, refresh_ms=cls.default_refresh)
         probe = cls(cfg)
-        cfg.x, cfg.y = self._free_position(tuple(probe.base_size))
+        bw, bh = probe.base_size
+        cfg.x, cfg.y = self._free_position((int(bw), int(bh)))
         if self.hidden_all:
             self.hidden_all = False
             self.set_all_visible(True)

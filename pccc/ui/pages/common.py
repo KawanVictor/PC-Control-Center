@@ -10,7 +10,7 @@ from ..components import label
 
 
 _icon_provider = None
-_icon_cache: dict[str, QIcon] = {}
+_icon_cache: dict[str, QIcon | None] = {}
 
 
 def file_icon(path: str) -> QIcon | None:
@@ -78,9 +78,9 @@ def ask(parent, title: str, text: str, detail: str = "", danger_text: str = "Con
     box.setText(text)
     if detail:
         box.setInformativeText(detail)
-    ok = box.addButton(danger_text, QMessageBox.AcceptRole)
-    box.addButton("Cancelar", QMessageBox.RejectRole)
-    box.setDefaultButton(box.buttons()[-1])  # padrão = Cancelar
+    ok = box.addButton(danger_text, QMessageBox.ButtonRole.AcceptRole)
+    cancel = box.addButton("Cancelar", QMessageBox.ButtonRole.RejectRole)
+    box.setDefaultButton(cancel)  # padrão = Cancelar
     box.exec()
     return box.clickedButton() is ok
 

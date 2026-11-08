@@ -262,7 +262,7 @@ class InstalledView(QWidget):
                 from ....core.winapi import run_hidden
                 out = run_hidden(["powershell.exe", "-NoProfile", "-NonInteractive", "-Command",
                                   store_uninstall_command(a.key)], timeout=300)
-                code = 0
+                code: int | None = 0
             else:
                 code = shell_execute_wait(exe, args)
                 out = ""

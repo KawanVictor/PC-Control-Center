@@ -128,7 +128,7 @@ def fetch_feed(cid: str) -> list[Video]:
         out.append(Video(id=vid, title=e.findtext("a:title", "", NS), channel=channel, channel_id=cid,
                          published=_ts(e.findtext("a:published", "", NS)),
                          views=int(stats.get("views", 0)) if stats is not None else 0,
-                         url=link.get("href") if link is not None else f"https://www.youtube.com/watch?v={vid}",
+                         url=(link.get("href") if link is not None else None) or f"https://www.youtube.com/watch?v={vid}",
                          thumb_url=f"https://i.ytimg.com/vi/{vid}/mqdefault.jpg"))
     return out
 

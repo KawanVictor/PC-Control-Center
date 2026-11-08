@@ -9,9 +9,10 @@ from ...components import label
 from ...icons import G
 from ...tasks import run_task
 from ..common import make_table
+from ._tab import PersonalizationTab
 
 
-class DefaultsTab:
+class DefaultsTab(PersonalizationTab):
     """Parte da PersonalizationPage (usa self.add, self._section, self.changed...)."""
 
     # ============================================================= APPS PADRÃO

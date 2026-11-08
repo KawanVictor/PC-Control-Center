@@ -38,8 +38,8 @@ def wait_all(timeout_ms: int = 5000) -> None:
             t.wait(timeout_ms)
 
 
-def run_task(fn: Callable[..., Any], *args, on_done: Callable[[Any], None] | None = None,
-             on_error: Callable[[str], None] | None = None) -> BackgroundTask:
+def run_task(fn: Callable[..., Any], *args, on_done: Callable[[Any], object] | None = None,
+             on_error: Callable[[str], object] | None = None) -> BackgroundTask:
     t = BackgroundTask(fn, *args)
     if on_done:
         t.done.connect(on_done)

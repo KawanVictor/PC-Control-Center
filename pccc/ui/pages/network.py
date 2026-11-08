@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 import pyqtgraph as pg
 from PySide6.QtCore import QSize, Qt, QTimer
-from PySide6.QtWidgets import (QComboBox, QGridLayout, QHBoxLayout, QMessageBox, QProgressBar, QPushButton,
+from PySide6.QtWidgets import (QComboBox, QGridLayout, QHBoxLayout, QLabel, QMessageBox, QProgressBar, QPushButton,
                                QVBoxLayout, QWidget)
 
 from ...core.database import Database
@@ -52,14 +52,16 @@ def _signal_label(pct: int) -> str:
 
 
 class NetworkPage(Page):
+    down_val: QLabel      # criados no laço do cartão de tráfego (setattr)
+    up_val: QLabel
     title = "Rede e Wi-Fi"
     subtitle = "Conexão, velocidade, latência e consumo de dados em tempo real"
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         size = History.instance().size
-        self._down = deque(maxlen=size)
-        self._up = deque(maxlen=size)
+        self._down: deque[float] = deque(maxlen=size)
+        self._up: deque[float] = deque(maxlen=size)
         self._auto = True
         self._selected_iface: str | None = None
         self._snap: NetworkSnapshot | None = None
@@ -301,8 +303,9 @@ class NetworkPage(Page):
 
     def _set_auto(self, on: bool) -> None:
         self._auto = on
-        if on and NetworkService.instance().latest:
-            self.on_net_snapshot(NetworkService.instance().latest)
+        latest = NetworkService.instance().latest
+        if on and latest:
+            self.on_net_snapshot(latest)
 
     def _refresh_now(self) -> None:
         NetworkService.instance().refresh()
