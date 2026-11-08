@@ -140,6 +140,15 @@ dependem do hardware: segurança, alertas e relatórios (relógio simulado), mí
 simulado) e o desenho dos widgets fora da tela. As verificações que precisam de placa de som, rede
 local ou área de trabalho real aparecem como PULADO lá e rodam no `tests.run_all` local.
 
+O CI também roda o **ruff** (lint) e o **mypy** (checagem de tipos), configurados em
+[pyproject.toml](pyproject.toml). Para rodar localmente:
+
+```powershell
+& $py -m pip install -r requirements-dev.txt
+& $py -m ruff check .
+& $py -m mypy
+```
+
 ```powershell
 $py = "$env:LOCALAPPDATA\PCControlCenter\venv\Scripts\python.exe"
 & $py -m tests.run_all             # TODAS as baterias com resumo (~2 min)

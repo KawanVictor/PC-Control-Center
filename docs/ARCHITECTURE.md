@@ -61,6 +61,8 @@ PC/
 ├── requirements.txt          faixas de versão aceitas
 ├── requirements.lock         versões exatas (setup, build e CI instalam daqui)
 ├── requirements-build.lock   + PyInstaller, para o build.ps1
+├── requirements-dev.txt      + ruff, mypy e pacotes de tipos (CI e desenvolvimento)
+├── pyproject.toml            configuração do ruff e do mypy
 ├── setup.ps1 / run.bat         instalação e execução (modo desenvolvimento)
 ├── build.ps1                   gera o .EXE, o instalador e o .zip portátil (Fase 8)
 ├── pccc.spec                   configuração do PyInstaller
@@ -112,7 +114,7 @@ PC/
 │   │   └── processes.py        encerramento seguro (lista de processos protegidos)
 │   ├── widgets/                widgets da área de trabalho (Fase 5)
 │   │   ├── base.py             WidgetConfig, Renderer, Canvas (desenho vetorial), Style
-│   │   ├── types/            os 20 tipos: um módulo por tipo (clock, cpu, weather...), _common e REGISTRY no __init__
+│   │   ├── types/              os 20 tipos: um módulo por tipo (clock, cpu, weather...), _common e REGISTRY no __init__
 │   │   ├── window.py           janela sem borda: arrastar, encaixar, redimensionar, menu
 │   │   ├── hub.py              DataHub: dados compartilhados + histórico curto
 │   │   ├── weather.py          Open-Meteo (geocodificação + previsão)
@@ -156,6 +158,7 @@ PC/
 │       ├── components.py       GlassCard, RingGauge, LiveChart, MetricCard, ToggleSwitch...
 │       ├── history.py          buffers dos gráficos em tempo real
 │       ├── fmt.py              formatação pt-BR
+│       ├── qtutil.py           qapp() e clear_layout(), usados por várias telas
 │       ├── main_window.py      janela, barra lateral, bandeja, transições
 │       └── pages/
 │           ├── dashboard.py    painel principal
@@ -165,7 +168,7 @@ PC/
 │           ├── apps/           Aplicativos: __init__ (página) + installed, processes, startup
 │           ├── widgets.py      galeria com miniaturas ao vivo, perfis, opções
 │           ├── personalization/  página + uma classe por aba (LookTab, WallpaperTab, ThemesTab,
-│           │                   ExplorerTab, ShortcutsTab, DefaultsTab, HistoryTab) e tweak_row
+│           │                   ExplorerTab, ShortcutsTab, DefaultsTab, HistoryTab), base _tab e tweak_row
 │           ├── alerts.py       central, regras/notificações, diagnóstico, relatórios
 │           ├── tools.py        atalhos para ferramentas do Windows
 │           ├── settings.py     configurações e registro de operações

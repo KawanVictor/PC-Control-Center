@@ -1,5 +1,14 @@
 # Histórico de versões
 
+## Não lançado
+- `widgets/types.py` virou um pacote com um módulo por tipo de widget.
+- Lint (ruff) e checagem de tipos (mypy) no CI, com versões fixas em `requirements-dev.txt`. Os
+  ajustes que eles pediram corrigiram nomes que escondiam métodos do Qt (`render`, `actions`),
+  variáveis reaproveitadas com outro tipo e acessos a valores que podem ser nulos.
+- Enums do Qt na forma completa (`Qt.AlignmentFlag.AlignCenter`), a única que os tipos do PySide6
+  reconhecem.
+- Saudação do painel entre meia-noite e 5h corrigida ("Boa noite").
+
 ## 1.2.1
 - Capturas de tela no README, geradas em modo demonstração (`build_tools/readme_shots.py`), sem
   dados pessoais.

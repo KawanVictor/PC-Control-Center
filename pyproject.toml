@@ -1,0 +1,25 @@
+# Configuração das ferramentas de qualidade (o app não é instalado como pacote: roda com main.py).
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-exclude = ["build", "dist", "release"]
+
+[tool.ruff.lint]
+# Erros de sintaxe, nomes indefinidos, imports e variáveis sem uso, e armadilhas comuns
+select = ["E4", "E7", "E9", "F", "B"]
+
+[tool.mypy]
+python_version = "3.12"   # a mesma das versões fixadas em requirements.lock
+platform = "win32"
+files = ["pccc", "main.py"]
+check_untyped_defs = true
+warn_unused_ignores = true
+# Nos sinais do Qt usamos de propósito "lambda: (a(), b())" para rodar duas ações num clique;
+# o mypy reclamaria que a() e b() não retornam valor.
+disable_error_code = ["func-returns-value"]
+
+# Bibliotecas sem informação de tipos (nem pacote types-*): o mypy as trata como Any
+[[tool.mypy.overrides]]
+module = ["wmi", "pyqtgraph", "pyqtgraph.*", "pycaw.*", "comtypes", "comtypes.*", "soundcard"]
+ignore_missing_imports = true
