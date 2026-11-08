@@ -164,7 +164,7 @@ class PingMonitor:
             out.avg_ms = sum(ok) / len(ok)
             out.min_ms = min(ok)
             out.max_ms = max(ok)
-            diffs = [abs(a - b) for a, b in zip(window, window[1:]) if not (math.isnan(a) or math.isnan(b))]
+            diffs = [abs(a - b) for a, b in zip(window, window[1:], strict=False) if not (math.isnan(a) or math.isnan(b))]
             out.jitter_ms = sum(diffs) / len(diffs) if diffs else 0.0
         return out
 

@@ -122,10 +122,10 @@ class AlertEngine(QObject):
             hot = temp is not None and temp >= rule.threshold
             crit = temp is not None and temp >= CRITICAL_TEMP[key]
             part = "O processador" if key == "cpu_temp" else "A placa de vídeo"
-            self._check(key, rule, hot, lambda t=temp, c=crit, p=part, k=key: Alert(
+            self._check(key, rule, hot, lambda t=temp, c=crit, p=part, k=key, a=rule.action: Alert(
                 k, "critical" if c else "warning", f"Temperatura da {'CPU' if k == 'cpu_temp' else 'GPU'} alta",
                 f"{p} está a {t:.0f} °C. Verifique a ventilação (saídas de ar livres, superfície rígida) "
-                "e feche programas pesados.", t, rule.action))
+                "e feche programas pesados.", t, a))
 
         rule = r["disk_free"]
         for p in s.partitions:

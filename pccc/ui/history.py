@@ -52,5 +52,5 @@ class History:
 
         if len(self.cores) != len(s.cpu.per_core):
             self.cores = [deque(maxlen=self.size) for _ in s.cpu.per_core]
-        for d, v in zip(self.cores, s.cpu.per_core):
+        for d, v in zip(self.cores, s.cpu.per_core, strict=True):
             d.append(v)

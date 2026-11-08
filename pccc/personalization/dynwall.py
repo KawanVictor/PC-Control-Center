@@ -58,7 +58,7 @@ def _get(url: str, timeout: float = 30) -> bytes:
 
 
 def _save(name: str, data: bytes, meta: dict) -> str:
-    if not data[:4] in (b"\xff\xd8\xff\xe0", b"\xff\xd8\xff\xe1", b"\xff\xd8\xff\xdb", b"\xff\xd8\xff\xee") \
+    if data[:4] not in (b"\xff\xd8\xff\xe0", b"\xff\xd8\xff\xe1", b"\xff\xd8\xff\xdb", b"\xff\xd8\xff\xee") \
             and not data.startswith(b"\x89PNG"):
         raise ValueError("O arquivo baixado não é uma imagem JPG/PNG.")
     ext = ".png" if data.startswith(b"\x89PNG") else ".jpg"
@@ -250,8 +250,8 @@ class DynamicWallpaper(QObject):
             per = period_now()
             path = (c.get("periods") or {}).get(per, "")
             if not path or not os.path.isfile(path):
-                raise RuntimeError(f"Escolha a imagem para {dict((k, l) for k, l, _h in PERIODS)[per]}.")
-            cap = dict((k, l) for k, l, _h in PERIODS)[per]
+                raise RuntimeError(f"Escolha a imagem para {dict((k, label) for k, label, _h in PERIODS)[per]}.")
+            cap = dict((k, label) for k, label, _h in PERIODS)[per]
         set_image(path)
         return path, cap, period_now()
 

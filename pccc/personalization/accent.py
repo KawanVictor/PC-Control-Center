@@ -37,14 +37,14 @@ def _abgr(r: int, g: int, b: int) -> int:
 def palette(hex_color: str) -> list[tuple[int, int, int]]:
     """8 tons: 3 mais claros, o próprio (índice 3), 3 mais escuros e o 8º preservado do Windows."""
     r, g, b = (c / 255 for c in _hex_to_rgb(hex_color))
-    h, l, s = colorsys.rgb_to_hls(r, g, b)
+    h, lum, s = colorsys.rgb_to_hls(r, g, b)
 
     def tone(light: float) -> tuple[int, int, int]:
         rr, gg, bb = colorsys.hls_to_rgb(h, max(0.0, min(1.0, light)), s)
         return round(rr * 255), round(gg * 255), round(bb * 255)
 
-    lights = [tone(l + (1 - l) * f) for f in (0.65, 0.40, 0.15)]
-    darks = [tone(l * f) for f in (0.90, 0.69, 0.49)]   # proporções medidas na paleta padrão do Windows
+    lights = [tone(lum + (1 - lum) * f) for f in (0.65, 0.40, 0.15)]
+    darks = [tone(lum * f) for f in (0.90, 0.69, 0.49)]   # proporções medidas na paleta padrão do Windows
     return lights + [_hex_to_rgb(hex_color)] + darks
 
 

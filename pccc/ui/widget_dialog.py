@@ -81,7 +81,7 @@ class WidgetConfigDialog(QDialog):
         accent_row = QHBoxLayout()
         self.accent_btn = ColorButton(self.cfg.accent, True, lambda c: self._set("accent", c))
         accent_row.addWidget(self.accent_btn)
-        for key, (c1, _c2) in list(ACCENTS.items())[:5]:
+        for _key, (c1, _c2) in list(ACCENTS.items())[:5]:
             b = QPushButton()
             b.setFixedSize(22, 22)
             b.setStyleSheet(f"QPushButton {{ background: {c1}; border-radius: 11px; border: none; }}")

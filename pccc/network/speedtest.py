@@ -76,7 +76,7 @@ def _latency(samples: int = 12) -> tuple[float, float]:
         time.sleep(0.05)
     if not times:
         raise OSError("servidor de teste não respondeu")
-    jitter = statistics.mean(abs(a - b) for a, b in zip(times, times[1:])) if len(times) > 1 else 0.0
+    jitter = statistics.mean(abs(a - b) for a, b in zip(times, times[1:], strict=False)) if len(times) > 1 else 0.0
     return statistics.median(times), jitter
 
 

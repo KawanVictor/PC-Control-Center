@@ -62,7 +62,7 @@ def main() -> int:
         if code != 0:
             failures.append((desc, out))
     if exe:
-        print(f"[+] autoteste do executável...", flush=True)
+        print("[+] autoteste do executável...", flush=True)
         code, secs, out = _run([exe, "--selftest"], timeout=120)
         log = Path(os.environ["APPDATA"]) / "PCControlCenter" / "logs" / "selftest.txt"
         rows.append(("executável --selftest", code == 0, secs))

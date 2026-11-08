@@ -383,7 +383,7 @@ def scan(progress=None) -> tuple[LocalNet, list[LanDevice]]:
     pool = ThreadPoolExecutor(max_workers=min(256, len(hosts) + 4), thread_name_prefix="pccc-lan")
     ssdp_future = pool.submit(ssdp_discover, ln.ip, ln.network)
     try:
-        for ip, mac in zip(hosts, pool.map(send_arp, hosts)):
+        for ip, mac in zip(hosts, pool.map(send_arp, hosts), strict=True):
             if mac and _valid(ip, mac, ln.network):
                 found[ip] = mac
         say(f"{len(found)} aparelho(s) respondendo — identificando nomes...")

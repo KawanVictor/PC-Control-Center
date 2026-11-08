@@ -168,7 +168,7 @@ class DashboardPage(Page):
                 f"↓ Leitura {fmt_rate(s.disk_io.read_bps)}  ·  ↑ Gravação {fmt_rate(s.disk_io.write_bps)}",
                 f"{fmt_pct(sysdrive.percent)} usado\nde {fmt_bytes(sysdrive.total)}",
                 sysdrive.percent,
-                [a + b for a, b in zip(h.get("disk_read"), h.get("disk_write"))],
+                [a + b for a, b in zip(h.get("disk_read"), h.get("disk_write"), strict=False)],
                 badge=f"Atividade {fmt_pct(s.disk_io.active_percent)}")
         net = NetworkService.instance().latest
         badge, side = None, f"Total recebido\n{fmt_bytes(s.net_io.total_recv)}"

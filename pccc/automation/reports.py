@@ -115,7 +115,7 @@ def _svg_chart(ts: list, series: list[tuple[str, list, str]], height: int = 160,
         # Quebra a linha onde não há dados por mais de 10 min (app fechado / PC desligado),
         # para não desenhar uma reta inventada sobre o intervalo.
         segments, cur, prev_t = [], [], None
-        for t, v in zip(ts, vals):
+        for t, v in zip(ts, vals, strict=True):
             if v is None:
                 continue
             if prev_t is not None and t - prev_t > 600 and cur:
@@ -233,7 +233,7 @@ def export_csv(rep: dict, path: Path | None = None) -> str:
                     "upload_Mbps", "leitura_disco_MBs", "gravacao_disco_MBs"])
         s = rep["series"]
         for i, t in enumerate(rep["ts"]):
-            def v(col, f=1.0, dec=1):
+            def v(col, f=1.0, dec=1, i=i):
                 x = s[col][i]
                 return "" if x is None else f"{x * f:.{dec}f}".replace(".", ",")
             w.writerow([datetime.fromtimestamp(t).strftime("%d/%m/%Y %H:%M"), v("cpu"), v("ram"), v("gpu"),

@@ -43,7 +43,7 @@ class AudioVisualizer:
         freqs = np.fft.rfftfreq(FFT, 1 / RATE)
         self._bins = [(int(np.searchsorted(freqs, lo)), max(int(np.searchsorted(freqs, hi)),
                                                              int(np.searchsorted(freqs, lo)) + 1))
-                      for lo, hi in zip(edges[:-1], edges[1:])]
+                      for lo, hi in zip(edges[:-1], edges[1:], strict=True)]
         self._window = np.hanning(FFT).astype(np.float32)
         # graves têm muito mais energia: compensação leve para o desenho ficar equilibrado
         self._tilt = np.linspace(0.0, 9.0, BANDS)

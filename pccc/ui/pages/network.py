@@ -124,7 +124,7 @@ class NetworkPage(Page):
         self.iface_badge = label("", "Badge")
         traffic.add_header_widget(self.iface_badge)
         speeds = QHBoxLayout()
-        for attr, glyph, title, color in (("down_val", G.DOWN, "Download", SERIES["down"]),
+        for attr, _glyph, title, color in (("down_val", G.DOWN, "Download", SERIES["down"]),
                                           ("up_val", G.UP, "Upload", SERIES["up"])):
             box = QVBoxLayout()
             box.setSpacing(0)
