@@ -548,6 +548,8 @@ def main() -> int:
     width = max(len(n) for n, _, _ in results)
     for name, ok, err in results:
         print(f"[{'OK ' if ok else 'ERRO'}] {name:<{width}}  {err}")
+        if not ok and os.environ.get("GITHUB_ACTIONS"):   # vira anotação visível na página do CI
+            print(f"::error title=test_media_scenes::{name}: {err}")
     for name in skipped:
         print(f"[PULADO] {name}  (depende do hardware; roda fora do CI)")
     failed = [n for n, ok, _ in results if not ok]
