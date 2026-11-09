@@ -161,14 +161,17 @@ PC/
 │           ├── dashboard.py    painel principal
 │           ├── performance.py  CPU, memória, GPU, discos, histórico
 │           ├── network.py      Wi-Fi, velocidade, ping, estabilidade, consumo, speedtest
-│           ├── apps.py         Instalados / Processos / Inicialização
+│           ├── common.py       auxiliares das páginas: tabela, confirmação (ask), linha de ajuste, ícones
+│           ├── apps/           Aplicativos: __init__ (página) + installed, processes, startup
 │           ├── widgets.py      galeria com miniaturas ao vivo, perfis, opções
-│           ├── personalization.py  8 abas de personalização + histórico
+│           ├── personalization/  página + uma classe por aba (LookTab, WallpaperTab, ThemesTab,
+│           │                   ExplorerTab, ShortcutsTab, DefaultsTab, HistoryTab) e tweak_row
 │           ├── alerts.py       central, regras/notificações, diagnóstico, relatórios
 │           ├── tools.py        atalhos para ferramentas do Windows
 │           ├── settings.py     configurações e registro de operações
-│           ├── media.py        mídia e streaming (áudio, OBS, YouTube, FPS)
-│           ├── scenes.py       cenários e estilo
+│           ├── media/          Mídia e streaming: audio, obs, youtube, fps + charts (desenhos)
+│           ├── scenes/         Cenários e estilo: scene_list, autotheme, livewall, display,
+│           │                   hotkeys, bundle
 │           └── lan.py          aba "Dispositivos na rede"
 ├── tests/
 │   ├── test_collector.py       teste de integração do coletor
@@ -180,7 +183,7 @@ PC/
 │   ├── test_personalization.py aplica e desfaz cada tipo de alteração (Registro conferido)
 │   ├── test_automation.py      13 cenários do motor de alertas (relógio simulado) + relatórios
 │   ├── test_security.py        17 verificações de segurança (análise do código + comportamento)
-│   ├── test_media_scenes.py    15 verificações: OBS simulado, FPS, YouTube, cenários, atalhos, temas
+│   ├── test_media_scenes.py    18 verificações: OBS simulado, FPS, YouTube, cenários, atalhos, temas
 │   ├── run_all.py              executa todas as baterias e resume (--full, --exe)
 │   └── ui_smoke.py             teste de fumaça da interface com capturas
 └── docs/
