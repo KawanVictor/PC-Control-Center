@@ -19,7 +19,9 @@ from .base import Page
 
 def _greeting() -> str:
     h = datetime.now().hour
-    return "Bom dia" if 5 <= h < 12 else "Boa tarde" if h < 18 else "Boa noite"
+    if 5 <= h < 12:
+        return "Bom dia"
+    return "Boa tarde" if 12 <= h < 18 else "Boa noite"     # 18h até 4h59: boa noite
 
 
 class DashboardPage(Page):
