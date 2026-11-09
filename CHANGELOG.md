@@ -1,6 +1,6 @@
 # Histórico de versões
 
-## Não lançado
+## 1.2.1
 - Capturas de tela no README, geradas em modo demonstração (`build_tools/readme_shots.py`), sem
   dados pessoais.
 - Versões exatas das dependências em `requirements.lock` e `requirements-build.lock`: setup, build

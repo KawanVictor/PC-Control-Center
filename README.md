@@ -5,7 +5,7 @@ computador (nada simulado). Feito em Python + PySide6 (Qt 6), usando APIs nativa
 
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4)
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB)
-![Versão](https://img.shields.io/badge/vers%C3%A3o-1.2.0-22d3ee)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-1.2.1-22d3ee)
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 [![CI](https://github.com/KawanVictor/PC-Control-Center/actions/workflows/ci.yml/badge.svg)](https://github.com/KawanVictor/PC-Control-Center/actions/workflows/ci.yml)
 
