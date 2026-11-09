@@ -1,4 +1,4 @@
-# PC Control Center: versões exatas usadas para gerar o .exe 1.2.0 (Python 3.12).
+# PC Control Center: versões exatas usadas para gerar o .exe publicado (Python 3.12).
 # O setup.ps1, o build.ps1 e o CI instalam a partir deste arquivo, para o build ser reproduzível.
 # requirements.txt guarda as faixas aceitas. Para atualizar este arquivo: instale requirements.txt
 # num venv limpo, rode os testes e copie a saída de "pip freeze" (sem os pacotes do PyInstaller).
