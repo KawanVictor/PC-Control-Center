@@ -28,7 +28,6 @@ sys.path.insert(0, str(ROOT))
 TMP = Path(tempfile.mkdtemp(prefix="pccc-f9-"))
 os.environ["APPDATA"] = str(TMP)          # configurações, banco, widgets e cache isolados
 
-from PySide6.QtCore import QTimer  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 app = QApplication(sys.argv)

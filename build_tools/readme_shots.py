@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT))
 os.environ["APPDATA"] = tempfile.mkdtemp(prefix="pccc-demo-")
 platform.node = lambda: "MEU-PC"
 
-from PySide6.QtCore import QPointF, QRectF, Qt, QTimer  # noqa: E402
+from PySide6.QtCore import QPointF, QRectF, QTimer  # noqa: E402
 from PySide6.QtGui import (QColor, QImage, QLinearGradient, QPainter, QPainterPath,  # noqa: E402
                            QRadialGradient)
 from PySide6.QtWidgets import QApplication  # noqa: E402
