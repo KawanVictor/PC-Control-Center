@@ -395,9 +395,12 @@ def _():
 @check("Sol e tema automático: São Paulo, sol da meia-noite e horários que passam da meia-noite")
 def _():
     from pccc.personalization import autotheme, sun
+    from datetime import timezone
     rise, set_ = sun.sun_times(-23.5475, -46.63611, date(2026, 11, 7))
-    assert abs((rise.hour * 60 + rise.minute) - (5 * 60 + 13)) <= 12, rise
-    assert abs((set_.hour * 60 + set_.minute) - (18 * 60 + 22)) <= 12, set_
+    # compara em UTC (05:13 e 18:22 em Brasília), para valer em qualquer fuso, como o do CI
+    rise, set_ = rise.astimezone(timezone.utc), set_.astimezone(timezone.utc)
+    assert abs((rise.hour * 60 + rise.minute) - (8 * 60 + 13)) <= 12, rise
+    assert abs((set_.hour * 60 + set_.minute) - (21 * 60 + 22)) <= 12, set_
     assert sun.sun_times(69.65, 18.96, date(2026, 6, 21)) == (None, None)       # Tromsø no verão
     cfg = {"mode": "fixed", "light_at": "07:00", "dark_at": "19:00"}
     assert autotheme.desired_light(datetime(2026, 1, 1, 12), cfg) is True
