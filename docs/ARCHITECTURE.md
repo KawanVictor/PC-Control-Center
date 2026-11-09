@@ -112,7 +112,7 @@ PC/
 │   │   └── processes.py        encerramento seguro (lista de processos protegidos)
 │   ├── widgets/                widgets da área de trabalho (Fase 5)
 │   │   ├── base.py             WidgetConfig, Renderer, Canvas (desenho vetorial), Style
-│   │   ├── types.py            os 15 tipos (REGISTRY)
+│   │   ├── types/            os 20 tipos: um módulo por tipo (clock, cpu, weather...), _common e REGISTRY no __init__
 │   │   ├── window.py           janela sem borda: arrastar, encaixar, redimensionar, menu
 │   │   ├── hub.py              DataHub: dados compartilhados + histórico curto
 │   │   ├── weather.py          Open-Meteo (geocodificação + previsão)
