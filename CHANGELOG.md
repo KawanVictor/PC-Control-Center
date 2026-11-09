@@ -1,5 +1,15 @@
 # Histórico de versões
 
+## Não lançado
+- Capturas de tela no README, geradas em modo demonstração (`build_tools/readme_shots.py`), sem
+  dados pessoais.
+- Versões exatas das dependências em `requirements.lock` e `requirements-build.lock`: setup, build
+  e CI instalam a partir delas.
+- CI roda também os alertas e relatórios (relógio simulado), mídia e cenários (OBS simulado) e o
+  desenho dos widgets.
+- As quatro páginas maiores (Aplicativos, Mídia, Cenários e Personalização) viraram pacotes com um
+  módulo por aba; auxiliares compartilhados em `pccc/ui/pages/common.py`.
+
 ## 1.2.0
 - **Dispositivos na rede** (página Rede e Wi-Fi): aparelhos conectados com nome, tipo provável, IP,
   fabricante e MAC. Permite dar nomes, marcar como conhecido e vigiar a rede, com aviso quando um
