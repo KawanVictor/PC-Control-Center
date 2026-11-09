@@ -66,6 +66,8 @@ PC/
 ├── pccc.spec                   configuração do PyInstaller
 ├── installer.iss               instalador por usuário (Inno Setup)
 ├── build_tools/make_assets.py  ícone .ico e metadados de versão do .EXE
+├── build_tools/readme_shots.py capturas do README em modo demonstração (dados fictícios)
+├── docs/img/                   capturas usadas no README
 ├── assets/app.ico              ícone (gerado do mesmo desenho usado no app)
 ├── release/                    resultado do build (instalador e .zip)
 ├── config/

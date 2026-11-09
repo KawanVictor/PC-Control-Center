@@ -9,6 +9,22 @@ computador (nada simulado). Feito em Python + PySide6 (Qt 6), usando APIs nativa
 ![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
 [![CI](https://github.com/KawanVictor/PC-Control-Center/actions/workflows/ci.yml/badge.svg)](https://github.com/KawanVictor/PC-Control-Center/actions/workflows/ci.yml)
 
+![Painel](docs/img/painel.png)
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/img/rede-aparelhos.png" alt="Aparelhos conectados à rede"><br><sub><b>Rede:</b> aparelhos conectados, com fabricante, tipo provável e aviso de aparelho novo</sub></td>
+    <td width="50%"><img src="docs/img/widgets-desktop.png" alt="Widgets na área de trabalho"><br><sub><b>Widgets</b> na área de trabalho: relógio, clima, CPU, RAM, rede, Wi-Fi...</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/img/cenarios.png" alt="Cenários de um clique"><br><sub><b>Cenários</b> de um clique (Jogo, Trabalho, Live, Noite) com "voltar ao normal"</sub></td>
+    <td width="50%"><img src="docs/img/desempenho.png" alt="Desempenho"><br><sub><b>Desempenho:</b> CPU por núcleo, memória, GPU, discos e histórico</sub></td>
+  </tr>
+</table>
+
+<sub>Capturas geradas em modo demonstração (`python -m build_tools.readme_shots`): nome do PC, rede
+Wi-Fi e aparelhos são fictícios; CPU, memória e discos são leituras reais.</sub>
+
 ## Recursos
 
 | Área | O que faz |
@@ -27,7 +43,8 @@ confirmação nas ações críticas e registro de tudo o que é feito. Veja [doc
 
 ## Instalar (usuário final)
 
-1. Baixe o `PCControlCenter-Setup-<versão>.exe` na página **Releases** do repositório (ou gere com o
+1. Baixe o `PCControlCenter-Setup-<versão>.exe` na página
+   [**Releases**](https://github.com/KawanVictor/PC-Control-Center/releases/latest) do repositório (ou gere com o
    `build.ps1`, que salva em `release\`). **Não precisa de administrador**: o app é instalado só para
    o seu usuário em `%LOCALAPPDATA%\Programs\PC Control Center`.
 2. Escolha se quer atalho na área de trabalho e se quer iniciar com o Windows.
