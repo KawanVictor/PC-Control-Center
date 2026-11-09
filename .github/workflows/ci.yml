@@ -19,7 +19,7 @@ jobs:
           cache: pip
 
       - name: Dependências
-        run: python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements.lock
 
       - name: Compilação de todos os módulos
         run: python -m compileall -q pccc tests main.py

@@ -85,8 +85,11 @@ Instalação manual equivalente:
 
 ```powershell
 python -m venv "$env:LOCALAPPDATA\PCControlCenter\venv"
-& "$env:LOCALAPPDATA\PCControlCenter\venv\Scripts\python.exe" -m pip install -r requirements.txt
+& "$env:LOCALAPPDATA\PCControlCenter\venv\Scripts\python.exe" -m pip install -r requirements.lock
 ```
+
+`requirements.lock` fixa a versão exata de cada pacote (as mesmas usadas no .exe publicado), para o
+build ser reproduzível. `requirements.txt` guarda só as faixas de versão aceitas.
 
 ### Execução
 

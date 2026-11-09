@@ -30,6 +30,6 @@ if (-not (Test-Path (Join-Path $venv "Scripts\python.exe"))) {
     & $python -m venv $venv
 }
 & (Join-Path $venv "Scripts\python.exe") -m pip install --upgrade pip
-& (Join-Path $venv "Scripts\python.exe") -m pip install -r (Join-Path $PSScriptRoot "requirements.txt")
+& (Join-Path $venv "Scripts\python.exe") -m pip install -r (Join-Path $PSScriptRoot "requirements.lock")
 Write-Host ""
 Write-Host "Pronto! Execute com:  run.bat   (ou: $venv\Scripts\python.exe main.py)"

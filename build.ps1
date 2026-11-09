@@ -41,7 +41,7 @@ $version = (& $py -c "import pccc; print(pccc.__version__)").Trim()
 Write-Host "PC Control Center v$version" -ForegroundColor Green
 
 Step "Dependências do build"
-& $py -m pip install --disable-pip-version-check -q -r requirements.txt pyinstaller
+& $py -m pip install --disable-pip-version-check -q -r requirements-build.lock
 if ($LASTEXITCODE) { Fail "pip install falhou" }
 
 if (-not $SkipTests) {

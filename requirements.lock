@@ -1,0 +1,27 @@
+# PC Control Center: versões exatas usadas para gerar o .exe 1.2.0 (Python 3.12).
+# O setup.ps1, o build.ps1 e o CI instalam a partir deste arquivo, para o build ser reproduzível.
+# requirements.txt guarda as faixas aceitas. Para atualizar este arquivo: instale requirements.txt
+# num venv limpo, rode os testes e copie a saída de "pip freeze" (sem os pacotes do PyInstaller).
+cffi==2.1.1
+colorama==0.4.6
+comtypes==1.4.17
+numpy==2.5.4
+psutil==7.2.2
+pycaw==20260927
+pycparser==3.12
+pyqtgraph==0.14.0
+PySide6==6.12.0
+PySide6_Addons==6.12.0
+PySide6_Essentials==6.12.0
+PySide6_Pdf==6.12.0.140
+PySide6_WebEngine==6.12.0.140
+pywin32==312
+shiboken6==6.12.0
+SoundCard==0.4.6
+typing_extensions==4.16.0
+winrt-runtime==4.1.0
+winrt-Windows.Foundation==4!10.0.28000.2957
+winrt-Windows.Foundation.Collections==4!10.0.28000.2957
+winrt-Windows.Media.Control==4!10.0.28000.2957
+winrt-Windows.Storage.Streams==4!10.0.28000.2957
+WMI==1.5.1

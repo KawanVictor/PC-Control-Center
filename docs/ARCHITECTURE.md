@@ -58,7 +58,9 @@ bandeja; ~1,6% com o painel completo aberto e animado.
 ```
 PC/
 ├── main.py                     ponto de entrada (+ --selftest; mensagem de erro se não abrir)
-├── requirements.txt
+├── requirements.txt          faixas de versão aceitas
+├── requirements.lock         versões exatas (setup, build e CI instalam daqui)
+├── requirements-build.lock   + PyInstaller, para o build.ps1
 ├── setup.ps1 / run.bat         instalação e execução (modo desenvolvimento)
 ├── build.ps1                   gera o .EXE, o instalador e o .zip portátil (Fase 8)
 ├── pccc.spec                   configuração do PyInstaller
