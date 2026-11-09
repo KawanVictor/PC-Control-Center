@@ -10,6 +10,9 @@ jobs:
     # O app usa APIs do Windows (WMI, Registro, Core Audio...): só roda em Windows.
     runs-on: windows-latest
     timeout-minutes: 20
+    env:
+      QT_QPA_PLATFORM: offscreen
+      PYTHONIOENCODING: utf-8
     steps:
       - uses: actions/checkout@v4
 
@@ -24,8 +27,17 @@ jobs:
       - name: Compilação de todos os módulos
         run: python -m compileall -q pccc tests main.py
 
+      # As baterias abaixo não dependem do hardware: relógio simulado, OBS simulado e desenho
+      # dos widgets fora da tela. O que precisa de som, rede local ou área de trabalho real
+      # aparece como PULADO e roda só no "python -m tests.run_all" local.
       - name: Testes de segurança (análise do código + comportamento)
-        env:
-          QT_QPA_PLATFORM: offscreen
-          PYTHONIOENCODING: utf-8
         run: python -m tests.test_security
+
+      - name: Alertas, relatórios e sugestões (relógio simulado)
+        run: python -m tests.test_automation
+
+      - name: Mídia, OBS, FPS e cenários (servidores simulados)
+        run: python -m tests.test_media_scenes
+
+      - name: Desenho dos widgets (fora da tela)
+        run: python -m tests.test_widgets --render-only "${{ runner.temp }}\widget_shots"

@@ -118,19 +118,24 @@ Se a opção estava ligada na versão em Python, ao abrir o .EXE o caminho é at
 
 ## Testes
 
+O [CI](.github/workflows/ci.yml) roda a cada push, num Windows limpo do GitHub, as baterias que não
+dependem do hardware: segurança, alertas e relatórios (relógio simulado), mídia e cenários (OBS
+simulado) e o desenho dos widgets fora da tela. As verificações que precisam de placa de som, rede
+local ou área de trabalho real aparecem como PULADO lá e rodam no `tests.run_all` local.
+
 ```powershell
 $py = "$env:LOCALAPPDATA\PCControlCenter\venv\Scripts\python.exe"
 & $py -m tests.run_all             # TODAS as baterias com resumo (~2 min)
 & $py -m tests.run_all --full      # + janelas reais dos widgets e teste de velocidade
 & $py -m tests.run_all --exe "$env:LOCALAPPDATA\PCControlCenter\build\dist\PC Control Center\PC Control Center.exe"
-& $py -m tests.test_security       # 15 verificações de segurança (ver docs/SECURITY.md)
+& $py -m tests.test_security       # 17 verificações de segurança (ver docs/SECURITY.md)
 & $py -m tests.test_collector      # coleta real por 4 s e valida os dados
 & $py -m tests.test_network        # Wi-Fi, interfaces, ping e consumo (6 s)
 & $py -m tests.test_network --speed  # + teste de velocidade real (~16 s, 100–400 MB)
 & $py -m tests.test_ping           # perda de pacotes e nota de estabilidade
 & $py -m tests.test_apps           # inicialização/desfazer, encerrar processo, desinstalação (fictícios)
-& $py -m tests.test_widgets        # gerenciador/perfis (sem tela) + desenho dos 15 widgets
-& $py -m tests.test_widgets --render-only shots   # imagens dos 15 widgets com fontes reais
+& $py -m tests.test_widgets        # gerenciador/perfis (sem tela) + desenho dos 20 widgets
+& $py -m tests.test_widgets --render-only shots   # imagens dos 20 widgets com fontes reais
 & $py -m tests.test_widget_windows # janelas reais: arrastar, encaixar, redimensionar (layout temporário)
 & $py -m tests.test_personalization  # aplica e DESFAZ cada tipo de alteração, conferindo o Registro
 & $py -m tests.test_automation     # motor de alertas (relógio simulado), relatórios e sugestões

@@ -41,9 +41,20 @@ results: list[tuple[str, bool, str]] = []
 ONLY = os.environ.get("PCCC_ONLY", "")      # rodar só os testes cujo nome contém este texto
 
 
-def check(name):
+# No CI (GitHub Actions) não há placa de som, rede local de verdade nem área de trabalho do
+# Windows: as verificações que dependem disso (needs=...) aparecem como PULADO.
+ON_CI = bool(os.environ.get("CI"))
+NO_DESKTOP = ON_CI or os.environ.get("QT_QPA_PLATFORM") == "offscreen"
+skipped: list[str] = []
+
+
+def check(name, needs: str = ""):
+    """Registra uma verificação. ``needs``: "hardware" (som, rede local, área de trabalho real)."""
     def deco(fn):
         if ONLY and ONLY.lower() not in name.lower():
+            return fn
+        if needs and ON_CI:
+            skipped.append(name)
             return fn
         print(f"... {name}", flush=True)
         try:
@@ -322,6 +333,10 @@ def _():
         raise AssertionError("permitiu o mesmo atalho em duas ações")
     except ValueError:
         pass
+    if NO_DESKTOP:   # sem área de trabalho interativa o Windows não entrega teclas simuladas
+        m.unregister_all()
+        print("      (disparo real pulado: sem área de trabalho)", flush=True)
+        return
     got = []
     m.triggered.connect(got.append)
     seq = [0x11, 0x12, 0x10, 0x78]
@@ -426,7 +441,7 @@ def _():
 
 
 # ===================================================== ÁUDIO (só leitura)
-@check("Áudio e visualizador: leitura do mixer e captura do som (sem alterar volume)")
+@check("Áudio e visualizador: leitura do mixer e captura do som (sem alterar volume)", needs="hardware")
 def _():
     from pccc.media import audio
     from pccc.media.visualizer import BANDS, AudioVisualizer
@@ -445,7 +460,7 @@ def _():
     v.stop()
 
 
-@check("Papel de parede animado: camada do Windows encontrada (sem abrir vídeo)")
+@check("Papel de parede animado: camada do Windows encontrada (sem abrir vídeo)", needs="hardware")
 def _():
     from pccc.personalization import livewall
     assert livewall.wallpaper_host() != 0
@@ -519,7 +534,7 @@ def _():
     assert new5 == []                                 # rede nova também começa sem alarme
 
 
-@check("Rede: busca real na rede local (só leitura) encontra este PC e o roteador")
+@check("Rede: busca real na rede local (só leitura) encontra este PC e o roteador", needs="hardware")
 def _():
     from pccc.network import devices as lan
     ln, devs = lan.scan()
@@ -533,6 +548,8 @@ def main() -> int:
     width = max(len(n) for n, _, _ in results)
     for name, ok, err in results:
         print(f"[{'OK ' if ok else 'ERRO'}] {name:<{width}}  {err}")
+    for name in skipped:
+        print(f"[PULADO] {name}  (depende do hardware; roda fora do CI)")
     failed = [n for n, ok, _ in results if not ok]
     print(f"\n{len(results) - len(failed)}/{len(results)} verificações da Fase 9 passaram")
     print("OK" if not failed else "FALHOU")

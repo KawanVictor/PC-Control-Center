@@ -139,14 +139,25 @@ def main() -> int:
     acc = eng.usage._acc.get("PCCC_Pesado")
     results["uso acumulado: ~0,6 s de CPU por segundo para app a 60%"] = bool(acc) and abs(acc[0] / acc[2] - 0.6) < 0.01
 
-    # 9. relatório com dados reais
+    # 9. relatório com dados reais (numa máquina sem histórico, como o CI, usa 1 h de amostras sintéticas)
     tmp = Path(tempfile.mkdtemp())
+    from pccc.core.database import Database
+    fake_ts = []
+    if reports.build_report("24h")["samples"] < 2:
+        now = int(datetime.now().timestamp())
+        fake_ts = [now - 60 * i for i in range(60, 0, -1)]
+        for i, t in enumerate(fake_ts):
+            Database.instance().insert_metrics(t, {"cpu": 20 + i % 50, "ram": 55.0, "cpu_temp": 60.0,
+                                                   "net_down": 1e5, "net_up": 2e4})
     rep = reports.build_report("24h")
     html = reports.export_html(rep, tmp / "r.html")
     csvp = reports.export_csv(rep, tmp / "r.csv")
     text = Path(html).read_text(encoding="utf-8")
     results[f"relatório 24 h: {rep['samples']} amostras, HTML e CSV gerados"] = (
         "Relatório de desempenho" in text and "<svg" in text and Path(csvp).stat().st_size > 50)
+    with Database.instance()._lock:
+        Database.instance()._conn.executemany("DELETE FROM metrics_history WHERE ts = ?", [(t,) for t in fake_ts])
+        Database.instance()._conn.commit()
 
     # 10. sugestões com RAM alta
     b, sugg = advisor.analyze(snap(ram=93, apps=[ProcessEntry(pid=3, name="Navegador.exe", cpu=5,
