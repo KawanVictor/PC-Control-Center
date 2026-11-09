@@ -20,7 +20,7 @@ from ..components import GlassCard, ResponsiveGrid, Segmented, ToggleSwitch, lab
 from ..icons import G
 from ..tasks import run_task
 from ..theme import ThemeManager
-from .apps import _ask
+from .common import ask as _ask
 from .base import Page
 
 

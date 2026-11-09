@@ -6,7 +6,7 @@ from datetime import datetime
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QGuiApplication
-from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QInputDialog, QMenu, QMessageBox, QPushButton,
+from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QInputDialog, QMenu, QPushButton,
                                QTableWidgetItem, QVBoxLayout, QWidget)
 
 from ...core.config import Settings
@@ -14,7 +14,7 @@ from ...core.winapi import shell_open
 from ...network import devices as lan
 from ..components import GlassCard, ResponsiveGrid, ToggleSwitch, label, stat_block
 from ..icons import G
-from .apps import _ask, make_table
+from .common import ask, make_table
 
 
 def _ago(ts: float) -> str:
@@ -194,7 +194,7 @@ class DevicesView(QWidget):
         self.render()
 
     def _forget(self, d: lan.LanDevice) -> None:
-        if _ask(self, "Esquecer aparelho", f"Remover “{d.label}” do histórico desta rede?",
+        if ask(self, "Esquecer aparelho", f"Remover “{d.label}” do histórico desta rede?",
                 "Só a anotação no PC Control Center é apagada. Se o aparelho voltar, aparece como novo.",
                 "Esquecer"):
             lan.forget(self.w.net_id, d.mac)

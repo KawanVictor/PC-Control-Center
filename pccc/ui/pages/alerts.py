@@ -22,14 +22,14 @@ from ..components import GlassCard, ResponsiveGrid, Segmented, ToggleSwitch, ico
 from ..fmt import fmt_bytes
 from ..icons import G
 from ..tasks import run_task
-from .apps import make_table
+from .common import make_table
 from .base import Page
 
 SEV_COLOR = {"critical": "#fb7185", "warning": "#fbbf24", "info": "#38bdf8", "tip": "#38bdf8", "ok": "#34d399"}
 SEV_TEXT = {"critical": "Crítico", "warning": "Atenção", "info": "Info", "tip": "Dica", "ok": "OK"}
 
 
-def _row(title: str, desc: str, control) -> QWidget:
+def setting_row(title: str, desc: str, control) -> QWidget:
     w = QWidget()
     h = QHBoxLayout(w)
     h.setContentsMargins(0, 4, 0, 4)
@@ -206,9 +206,9 @@ class AlertsPage(Page):
             t.toggled.connect(lambda v: self.s.set(key, v))
             return t
 
-        grid.addWidget(_row("Mostrar notificações do Windows", "Os alertas sempre ficam registrados na Central.",
+        grid.addWidget(setting_row("Mostrar notificações do Windows", "Os alertas sempre ficam registrados na Central.",
                             toggle("notifications.enabled")), 0, 0)
-        grid.addWidget(_row("Não atrapalhar jogos, vídeos e apresentações",
+        grid.addWidget(setting_row("Não atrapalhar jogos, vídeos e apresentações",
                             "Respeita tela cheia e o “Não incomodar” do Windows (alertas críticos aparecem mesmo assim).",
                             toggle("notifications.respect_focus")), 0, 1)
         qh = QWidget()
@@ -220,8 +220,8 @@ class AlertsPage(Page):
             te.setDisplayFormat("HH:mm")
             te.timeChanged.connect(lambda t, k=key: self.s.set(k, t.toString("HH:mm")))
             qhl.addWidget(te)
-        grid.addWidget(_row("Horário de silêncio", "Sem balões neste intervalo (ex.: à noite).", qh), 1, 0)
-        grid.addWidget(_row("Relatório semanal automático",
+        grid.addWidget(setting_row("Horário de silêncio", "Sem balões neste intervalo (ex.: à noite).", qh), 1, 0)
+        grid.addWidget(setting_row("Relatório semanal automático",
                             "Gera um relatório dos últimos 7 dias uma vez por semana e avisa quando estiver pronto.",
                             toggle("alerts.weekly_report")), 1, 1)
         notif.add(grid)

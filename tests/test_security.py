@@ -90,7 +90,7 @@ def _():
     # media/fps: botão "Ligar contador" → auxiliar elevado que roda o PresentMon (assinatura conferida).
     callers = _where(r"relaunch_as_admin\(|admin\s*=\s*True")
     assert callers <= {"pccc/core/winapi.py", "pccc/ui/pages/settings.py", "pccc/ui/pages/tools.py",
-                       "pccc/ui/pages/apps.py", "pccc/personalization/tweaks.py", "pccc/media/fps.py"}, callers
+                       "pccc/ui/pages/apps/startup.py", "pccc/personalization/tweaks.py", "pccc/media/fps.py"}, callers
 
 
 @check("Nenhum encerramento automático de processos")

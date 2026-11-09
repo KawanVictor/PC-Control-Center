@@ -19,7 +19,7 @@ from ...personalization.livewall import GIF_EXT, VIDEO_EXT, LiveWallpaper
 from ..components import GlassCard, ResponsiveGrid, Segmented, ToggleSwitch, label
 from ..icons import G
 from ..tasks import run_task
-from .apps import _ask
+from .common import ask as _ask
 from .base import Page
 
 

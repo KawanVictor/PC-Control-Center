@@ -15,7 +15,7 @@ from ...personalization import accent, changes, defaults, shortcuts, themes, twe
 from ..components import GlassCard, ResponsiveGrid, Segmented, ToggleSwitch, label
 from ..icons import G
 from ..tasks import run_task
-from .apps import _ask, make_table
+from .common import ask as _ask, make_table
 from .base import Page
 
 
